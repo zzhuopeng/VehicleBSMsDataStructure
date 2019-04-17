@@ -1,11 +1,11 @@
 #include "VehicleHistoryDatas.h"
 
-/**************æ ˆç›¸å…³æ“ä½œ***************/
+/**************Õ»Ïà¹Ø²Ù×÷***************/
 
 /**
-@ brief  åˆ¤æ–­è¯¥æ ˆæ˜¯å¦ä¸ºç©º
-@ param	 S æ ˆå˜é‡
-@ return 0è¡¨ç¤ºä¸ºç©ºï¼Œ1è¡¨ç¤ºéç©º
+@ brief  ÅĞ¶Ï¸ÃÕ»ÊÇ·ñÎª¿Õ
+@ param	 S Õ»±äÁ¿
+@ return 0±íÊ¾Îª¿Õ£¬1±íÊ¾·Ç¿Õ
 */
 int IsStackEmpty(Stack S)
 {
@@ -13,9 +13,9 @@ int IsStackEmpty(Stack S)
 }
 
 /**
-@ brief  åˆ›å»ºä¸€ä¸ªç©ºæ ˆ
+@ brief  ´´½¨Ò»¸ö¿ÕÕ»
 @ param	 void
-@ return Stack åˆ›å»ºçš„æ ˆ
+@ return Stack ´´½¨µÄÕ»
 */
 Stack CreateStack(void)
 {
@@ -26,7 +26,7 @@ Stack CreateStack(void)
 		return NULL;
 	}
 	memset(S,0,sizeof(tNode));
-	S->Next = NULL;//é˜²æ­¢é‡æŒ‡é’ˆ
+	S->Next = NULL;//·ÀÖ¹Ò°Ö¸Õë
 	S->StackSize = 0;
 	if(0 == clearStack(S)) {
 		printf("CreateStack: clearStack(S) failed\n");
@@ -35,9 +35,9 @@ Stack CreateStack(void)
 }
 
 /**
-@ brief  æ¸…é™¤æ ˆæ‰€æœ‰å…ƒç´ 
-@ param	 S æ ˆå˜é‡
-@ return 0è¡¨ç¤ºå¤±è´¥ï¼Œ1è¡¨ç¤ºæˆåŠŸ
+@ brief  Çå³ıÕ»ËùÓĞÔªËØ
+@ param	 S Õ»±äÁ¿
+@ return 0±íÊ¾Ê§°Ü£¬1±íÊ¾³É¹¦
 */
 int clearStack(Stack S)
 {
@@ -53,9 +53,9 @@ int clearStack(Stack S)
 }
 
 /**
-@ brief  è·å–Stackä¸­æ ˆé¡¶å…ƒç´ 
-@ param	 S æ ˆå˜é‡ï¼ŒtopBSM æ ˆé¡¶BSMæ¶ˆæ¯æŒ‡é’ˆ
-@ return 0è¡¨ç¤ºå¤±è´¥ï¼Œ1è¡¨ç¤ºæˆåŠŸ
+@ brief  »ñÈ¡StackÖĞÕ»¶¥ÔªËØ
+@ param	 S Õ»±äÁ¿£¬topBSM Õ»¶¥BSMÏûÏ¢Ö¸Õë
+@ return 0±íÊ¾Ê§°Ü£¬1±íÊ¾³É¹¦
 */
 int Top(Stack S, tBSM* topBSM)
 {
@@ -68,14 +68,14 @@ int Top(Stack S, tBSM* topBSM)
 		return 0;
 	}
 	*topBSM = S->Next->bsm;
-//	topBSM = &(S->Next->bsm);//æ³¨æ„ï¼šä¸èƒ½ç”¨è¿™ç§ï¼Œæ”¹å˜æŒ‡é’ˆçš„å€¼éœ€è¦åŒé‡æŒ‡é’ˆ
+//	topBSM = &(S->Next->bsm);//×¢Òâ£º²»ÄÜÓÃÕâÖÖ£¬¸Ä±äÖ¸ÕëµÄÖµĞèÒªË«ÖØÖ¸Õë
 	return 1;
 }
 
 /**
-@ brief  å‡ºæ ˆ(ä»æ ˆé¡¶å¼¹å‡ºå…ƒç´ ,æ¸…é™¤æ ˆé¡¶å…ƒç´ )
-@ param	 S æ ˆå˜é‡
-@ return 0è¡¨ç¤ºå¤±è´¥ï¼Œ1è¡¨ç¤ºæˆåŠŸ
+@ brief  ³öÕ»(´ÓÕ»¶¥µ¯³öÔªËØ,Çå³ıÕ»¶¥ÔªËØ)
+@ param	 S Õ»±äÁ¿
+@ return 0±íÊ¾Ê§°Ü£¬1±íÊ¾³É¹¦
 */
 int Pop(Stack S)
 {
@@ -93,9 +93,9 @@ int Pop(Stack S)
 }
 
 /**
-@ brief  è·å–Stackä¸­ä¸‹æ ‡ä¸ºindexå…ƒç´ 
-@ param	 S æ ˆå˜é‡; index å…ƒç´ ä¸‹æ ‡; indexBSM ä¸‹æ ‡indexå…ƒç´ å¯¹åº”çš„BSMæ¶ˆæ¯(0<=index<=StackSize-1)
-@ return 0è¡¨ç¤ºå¤±è´¥ï¼Œ1è¡¨ç¤ºæˆåŠŸ
+@ brief  »ñÈ¡StackÖĞÏÂ±êÎªindexÔªËØ
+@ param	 S Õ»±äÁ¿; index ÔªËØÏÂ±ê; indexBSM ÏÂ±êindexÔªËØ¶ÔÓ¦µÄBSMÏûÏ¢(0<=index<=StackSize-1)
+@ return 0±íÊ¾Ê§°Ü£¬1±íÊ¾³É¹¦
 */
 int StackQuery(Stack S, int index, tBSM* indexBSM)
 {
@@ -112,24 +112,24 @@ int StackQuery(Stack S, int index, tBSM* indexBSM)
 		return 0;
 	}
 
-	//è·å¾—æ ˆé¡¶èŠ‚ç‚¹
+	//»ñµÃÕ»¶¥½Úµã
 	tNode* pFirstNode;
 	pFirstNode = S->Next;
-	//å‘ä¸‹ç§»åŠ¨indexæ¬¡
+	//ÏòÏÂÒÆ¶¯index´Î
 	while(index) {
 		pFirstNode = pFirstNode->Next;
 		index--;
 	}
-	//è¿”å›ç»“æœ
+	//·µ»Ø½á¹û
 	*indexBSM = pFirstNode->bsm;
 	return 1;
 }
 
 /**
-@ brief  Stackéå†å™¨ï¼šå¦‚æœéœ€è¦ä¾¿åˆ©ä¸€ä¸ªæ ˆï¼Œå°½é‡é€šè¿‡StackIteratorå®ç°ï¼›
-		 å¦‚æœé€šè¿‡StackQueryå‡½æ•°ï¼Œåˆ™æ—¶é—´å¤æ‚åº¦ä¼šä»O(N)å¢åŠ åˆ°O(N*N)
-@ param	 S æ ˆå˜é‡
-@ return BSMæ¶ˆæ¯æ•°ç»„BSM[StackSize],**ç”¨å®Œè®°å¾—free()**
+@ brief  Stack±éÀúÆ÷£ºÈç¹ûĞèÒª±ãÀûÒ»¸öÕ»£¬¾¡Á¿Í¨¹ıStackIteratorÊµÏÖ£»
+		 Èç¹ûÍ¨¹ıStackQueryº¯Êı£¬ÔòÊ±¼ä¸´ÔÓ¶È»á´ÓO(N)Ôö¼Óµ½O(N*N)
+@ param	 S Õ»±äÁ¿
+@ return BSMÏûÏ¢Êı×éBSM[StackSize],**ÓÃÍê¼ÇµÃfree()**
 */
 tBSM* StackIterator(Stack S)
 {
@@ -137,37 +137,37 @@ tBSM* StackIterator(Stack S)
 		printf("StackIterator: S is empty\n");
 		return NULL;
 	}
-	//ç»“æ„ä½“æ•°ç»„ï¼Œéœ€è¦é€šè¿‡mallocåˆ›å»ºï¼Œè§ã€Šé«˜è´¨é‡C++/Cç¼–ç¨‹æŒ‡å—ã€‹æ—é”
+	//½á¹¹ÌåÊı×é£¬ĞèÒªÍ¨¹ımalloc´´½¨£¬¼û¡¶¸ßÖÊÁ¿C++/C±à³ÌÖ¸ÄÏ¡·ÁÖÈñ
 //	tBSM* bsm = (tBSM*)malloc(S->StackSize*sizeof(tBSM));
 //	memset(bsm, 0, S->StackSize*sizeof(tBSM));
-	//è¿™é‡Œç”¨calloc()ï¼Œå°±ä¸éœ€è¦ç”¨memset()äº†
+	//ÕâÀïÓÃcalloc()£¬¾Í²»ĞèÒªÓÃmemset()ÁË
 	tBSM* pBsm = (tBSM*)calloc(S->StackSize, sizeof(tBSM));
 	if(NULL == pBsm) {
 		printf("StackIterator: calloc failed\n");
 		return NULL;
 	}
-	//è·å¾—æ ˆé¡¶èŠ‚ç‚¹
+	//»ñµÃÕ»¶¥½Úµã
 	tNode* pFirstNode;
 	pFirstNode = S->Next;
-	//ç»“æ„ä½“æ•°ç»„èµ‹å€¼
+	//½á¹¹ÌåÊı×é¸³Öµ
 	int index = 0;
 	while(index < S->StackSize) {
 		*(pBsm+index) = pFirstNode->bsm;
 		pFirstNode = pFirstNode->Next;
 		index++;
 	}
-	//è¿”å›ç»“æœ
+	//·µ»Ø½á¹û
 	return pBsm;
 }
 
 /**
-@ brief  å…¥æ ˆï¼ˆéœ€è¦åˆ¤æ–­å®¹é‡å¤§å°ï¼Œè¶…è¿‡åˆ™éœ€è¦æŠŠæ ˆåº•å…ƒç´ å»æ‰ï¼‰
-@ param	 S æ ˆå˜é‡
-@ return 0è¡¨ç¤ºå¤±è´¥ï¼Œ1è¡¨ç¤ºæˆåŠŸ
+@ brief  ÈëÕ»£¨ĞèÒªÅĞ¶ÏÈİÁ¿´óĞ¡£¬³¬¹ıÔòĞèÒª°ÑÕ»µ×ÔªËØÈ¥µô£©
+@ param	 S Õ»±äÁ¿
+@ return 0±íÊ¾Ê§°Ü£¬1±íÊ¾³É¹¦
 */
 int StackPush(Stack S, tBSM bsm)
 {
-	//è¾¾åˆ°å®¹é‡ï¼Œéœ€è¦æ¸…é™¤åº•éƒ¨çš„å†å²æ•°æ®
+	//´ïµ½ÈİÁ¿£¬ĞèÒªÇå³ıµ×²¿µÄÀúÊ·Êı¾İ
 	if(S->StackSize >= STACK_CAPACITY) {
 		if(0 == clearBottom(S)) {
 			printf("StackPush: clearBottom() failed\n\n");
@@ -189,9 +189,9 @@ int StackPush(Stack S, tBSM bsm)
 }
 
 /**
-@ brief  åº•éƒ¨å‡ºæ ˆ
-@ param	 Sæ ˆå˜é‡
-@ return 0è¡¨ç¤ºå¤±è´¥ï¼Œ1è¡¨ç¤ºæˆåŠŸ
+@ brief  µ×²¿³öÕ»
+@ param	 SÕ»±äÁ¿
+@ return 0±íÊ¾Ê§°Ü£¬1±íÊ¾³É¹¦
 */
 int clearBottom(Stack S)
 {
@@ -199,16 +199,16 @@ int clearBottom(Stack S)
 		printf("clearBottom: S is empty\n");
 		return 0;
 	}
-	//è·å¾—æ ˆé¡¶èŠ‚ç‚¹
+	//»ñµÃÕ»¶¥½Úµã
 	tNode* pFirstNode;
 	pFirstNode = S->Next;
-	//å‘ä¸‹ç§»åŠ¨StackSize-1æ¬¡,è·å¾—æ ˆåº•èŠ‚ç‚¹
+	//ÏòÏÂÒÆ¶¯StackSize-1´Î,»ñµÃÕ»µ×½Úµã
 	int index = S->StackSize-1;
 	while(index) {
 		pFirstNode = pFirstNode->Next;
 		index--;
 	}
-	//æ¸…é™¤æ ˆåº•èŠ‚ç‚¹ï¼Œé‡Šæ”¾å†…å­˜
+	//Çå³ıÕ»µ×½Úµã£¬ÊÍ·ÅÄÚ´æ
 	free(pFirstNode);
 	pFirstNode=NULL;
 	return 1;

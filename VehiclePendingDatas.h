@@ -2,12 +2,12 @@
 #define _VehiclePendingDatas_H_
 
 /**
- * è¯´æ˜Žï¼šè½¦è¾†å¾…å¤„ç†æ•°æ®VPDs(Vehicle Pending Datas)å­˜å‚¨ç»“æž„ä½“
- 		å•ä¸ªè½¦è¾†å¾…å¤„ç†æ•°æ®é€šè¿‡BSMå­˜å‚¨ï¼Œè½¦è¾†ä¹‹é—´æ•°æ®é€šè¿‡PriorityQueueå­˜å‚¨ã€‚
- 		æŽ’åºè§„åˆ™ï¼šè½¦è¾†çŠ¶æ€+è½¦è¾†ä¹‹é—´è·ç¦»
- * æ³¨æ„ï¼šâ‘ PriorityQueueä¸­ï¼Œå¾…å¤„ç†æ¶ˆæ¯ä¸èƒ½ä¿ç•™å¤ªå¤šï¼Œ
- 		å¦åˆ™æ¯æ¬¡æ›´æ–°HVçš„BSMåŽï¼Œéƒ½éœ€è¦è€—è´¹è¾ƒå¤šæ—¶é—´é‡æŽ’åº
- 		 â‘¡PriorityQueueçš„å®¹é‡å°½é‡ä¸èƒ½ç»å¸¸è¢«å¡«æ»¡ï¼Œå¦åˆ™éœ€è¦ç»å¸¸PQDeleteMaxBSM()ï¼Œ æ¯”è¾ƒè€—æ—¶
+ * ËµÃ÷£º³µÁ¾´ý´¦ÀíÊý¾ÝVPDs(Vehicle Pending Datas)´æ´¢½á¹¹Ìå
+ 		µ¥¸ö³µÁ¾´ý´¦ÀíÊý¾ÝÍ¨¹ýBSM´æ´¢£¬³µÁ¾Ö®¼äÊý¾ÝÍ¨¹ýPriorityQueue´æ´¢¡£
+ 		ÅÅÐò¹æÔò£º³µÁ¾×´Ì¬+³µÁ¾Ö®¼ä¾àÀë
+ * ×¢Òâ£º¢ÙPriorityQueueÖÐ£¬´ý´¦ÀíÏûÏ¢²»ÄÜ±£ÁôÌ«¶à£¬
+ 		·ñÔòÃ¿´Î¸üÐÂHVµÄBSMºó£¬¶¼ÐèÒªºÄ·Ñ½Ï¶àÊ±¼äÖØÅÅÐò
+ 		 ¢ÚPriorityQueueµÄÈÝÁ¿¾¡Á¿²»ÄÜ¾­³£±»ÌîÂú£¬·ñÔòÐèÒª¾­³£PQDeleteMaxBSM()£¬ ±È½ÏºÄÊ±
  */
 
 #include <stdlib.h>
@@ -16,40 +16,40 @@
 #include <math.h>
 #include "VehicleHistoryDatas.h"
 
-/****å®å®šä¹‰****/
-#define PQ_MIN_CAPACITY 	8	//HVå‘¨å›´è½¦è¾†å¾…å¤„ç†ä¿¡æ¯ï¼ˆå †å®¹é‡ï¼‰æœ€å°ä¿ç•™ä¸ªæ•°
-#define PQ_MAX_CAPACITY 	64	//HVå‘¨å›´è½¦è¾†å¾…å¤„ç†ä¿¡æ¯ï¼ˆå †å®¹é‡ï¼‰æœ€å¤§ä¿ç•™ä¸ªæ•°
-#define EXPENDFACTOR		0.5 //æ‰©å®¹å› å­ï¼Œæ‰©å±•çš„å¤§å°=åŽŸå¤§å°*æ‰©å®¹å› å­
+/****ºê¶¨Òå****/
+#define PQ_MIN_CAPACITY 	8	//HVÖÜÎ§³µÁ¾´ý´¦ÀíÐÅÏ¢£¨¶ÑÈÝÁ¿£©×îÐ¡±£Áô¸öÊý
+#define PQ_MAX_CAPACITY 	64	//HVÖÜÎ§³µÁ¾´ý´¦ÀíÐÅÏ¢£¨¶ÑÈÝÁ¿£©×î´ó±£Áô¸öÊý
+#define EXPENDFACTOR		0.5 //À©ÈÝÒò×Ó£¬À©Õ¹µÄ´óÐ¡=Ô­´óÐ¡*À©ÈÝÒò×Ó
 
 
 
-/****ç»“æž„ä½“å®šä¹‰****/
+/****½á¹¹Ìå¶¨Òå****/
 typedef struct HeapStruct* PriorityQueue;
 
-//å †ç»“æž„ä½“ï¼ˆåŸºäºŽæ•°ç»„ï¼‰
+//¶Ñ½á¹¹Ìå£¨»ùÓÚÊý×é£©
 typedef struct HeapStruct {
-	int Capacity; 	//å †å®¹é‡(è‡ªå®šä¹‰)
-	int Size; 		//å½“å‰å †å¤§å°
-	tBSM* BSMs;		//BSMæ•°ç»„
+	int Capacity; 	//¶ÑÈÝÁ¿(×Ô¶¨Òå)
+	int Size; 		//µ±Ç°¶Ñ´óÐ¡
+	tBSM* BSMs;		//BSMÊý×é
 } tHeapStruct;
 
 
-/****ä¼˜å…ˆçº§é˜Ÿåˆ—ç›¸å…³æ“ä½œï¼ˆæœ€å°å †ï¼‰****/
-PriorityQueue PQInitialize(int capacity);				//åˆå§‹åŒ– ä¼˜å…ˆçº§é˜Ÿåˆ—ï¼ˆå †ï¼‰
-int PQDestroy(PriorityQueue PQhead);					//é”€æ¯ ä¼˜å…ˆçº§é˜Ÿåˆ—ï¼ˆå †ï¼‰
-int PQMakeEmpty(PriorityQueue PQhead);					//æ¸…ç©º ä¼˜å…ˆçº§é˜Ÿåˆ—ï¼ˆå †ï¼‰
-int PQInsertBSM(PriorityQueue PQhead, tBSM bsm);		//å…¥é˜Ÿï¼šæ’å…¥è½¦è¾†BSMæ¶ˆæ¯
+/****ÓÅÏÈ¼¶¶ÓÁÐÏà¹Ø²Ù×÷£¨×îÐ¡¶Ñ£©****/
+PriorityQueue PQInitialize(int capacity);				//³õÊ¼»¯ ÓÅÏÈ¼¶¶ÓÁÐ£¨¶Ñ£©
+int PQDestroy(PriorityQueue PQhead);					//Ïú»Ù ÓÅÏÈ¼¶¶ÓÁÐ£¨¶Ñ£©
+int PQMakeEmpty(PriorityQueue PQhead);					//Çå¿Õ ÓÅÏÈ¼¶¶ÓÁÐ£¨¶Ñ£©
+int PQInsertBSM(PriorityQueue PQhead, tBSM bsm);		//Èë¶Ó£º²åÈë³µÁ¾BSMÏûÏ¢
 
-double PQComputeKey(tBSM bsm);							//è®¡ç®—BSMæ¶ˆæ¯çš„ä¼˜å…ˆçº§ï¼ˆkeyè¶Šå°ï¼Œä¼˜å…ˆçº§è¶Šé«˜ï¼‰
-int PQDeleteMinBSM(PriorityQueue PQhead, tBSM* topBSM); //å‡ºé˜Ÿï¼šåˆ é™¤ä¼˜å…ˆçº§æœ€é«˜ï¼ˆå…³é”®å­—æœ€å°ï¼‰BSMæ¶ˆæ¯
-int PQQueryMinBSM(PriorityQueue PQhead, tBSM* topBSM);				//æŸ¥è¯¢ï¼šä¼˜å…ˆçº§æœ€é«˜ï¼ˆå…³é”®å­—æœ€å°ï¼‰BSMæ¶ˆæ¯
-//éåŽ†æ•°ç»„å®žçŽ°ï¼ˆæ‰¾å…³é”®å­—æœ€å¤§ï¼‰
-int PQDeleteMaxBSM(PriorityQueue PQhead, tBSM* bottomBSM); 				//å‡ºé˜Ÿï¼šåˆ é™¤ä¼˜å…ˆçº§æœ€ä½Žï¼ˆå…³é”®å­—æœ€å¤§ï¼‰BSMæ¶ˆæ¯
-int PQQueryMaxBSM(PriorityQueue PQhead, tBSM* bottomBSM);				//æŸ¥è¯¢ï¼šä¼˜å…ˆçº§æœ€ä½Žï¼ˆå…³é”®å­—æœ€å¤§ï¼‰BSMæ¶ˆæ¯
-//é‡æŽ’åºï¼ˆæœ€å°å †ï¼‰
-int PQReSort(PriorityQueue PQhead);					//æ›´æ–°HVçš„BSMæ¶ˆæ¯åŽï¼Œéœ€è¦å¯¹ä¼˜å…ˆçº§é˜Ÿåˆ—è¿›è¡Œé‡æŽ’åº
-int IsPQEmpty(PriorityQueue PQhead); 					//åˆ¤æ–­ä¼˜å…ˆçº§é˜Ÿåˆ—æ˜¯å¦ä¸ºç©º
-int IsPQFull(PriorityQueue PQhead);						//åˆ¤æ–­ä¼˜å…ˆçº§é˜Ÿåˆ—æ˜¯å¦å·²æ»¡
+double PQComputeKey(tBSM bsm);							//¼ÆËãBSMÏûÏ¢µÄÓÅÏÈ¼¶£¨keyÔ½Ð¡£¬ÓÅÏÈ¼¶Ô½¸ß£©
+int PQDeleteMinBSM(PriorityQueue PQhead, tBSM* topBSM); //³ö¶Ó£ºÉ¾³ýÓÅÏÈ¼¶×î¸ß£¨¹Ø¼ü×Ö×îÐ¡£©BSMÏûÏ¢
+int PQQueryMinBSM(PriorityQueue PQhead, tBSM* topBSM);				//²éÑ¯£ºÓÅÏÈ¼¶×î¸ß£¨¹Ø¼ü×Ö×îÐ¡£©BSMÏûÏ¢
+//±éÀúÊý×éÊµÏÖ£¨ÕÒ¹Ø¼ü×Ö×î´ó£©
+int PQDeleteMaxBSM(PriorityQueue PQhead, tBSM* bottomBSM); 				//³ö¶Ó£ºÉ¾³ýÓÅÏÈ¼¶×îµÍ£¨¹Ø¼ü×Ö×î´ó£©BSMÏûÏ¢
+int PQQueryMaxBSM(PriorityQueue PQhead, tBSM* bottomBSM);				//²éÑ¯£ºÓÅÏÈ¼¶×îµÍ£¨¹Ø¼ü×Ö×î´ó£©BSMÏûÏ¢
+//ÖØÅÅÐò£¨×îÐ¡¶Ñ£©
+int PQReSort(PriorityQueue PQhead);					//¸üÐÂHVµÄBSMÏûÏ¢ºó£¬ÐèÒª¶ÔÓÅÏÈ¼¶¶ÓÁÐ½øÐÐÖØÅÅÐò
+int IsPQEmpty(PriorityQueue PQhead); 					//ÅÐ¶ÏÓÅÏÈ¼¶¶ÓÁÐÊÇ·ñÎª¿Õ
+int IsPQFull(PriorityQueue PQhead);						//ÅÐ¶ÏÓÅÏÈ¼¶¶ÓÁÐÊÇ·ñÒÑÂú
 
 
 #endif
