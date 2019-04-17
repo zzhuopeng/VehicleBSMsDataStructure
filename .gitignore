@@ -2,7 +2,7 @@
 *.exe
 
 # 以下为项目配置文件
-# Makefile.win
-# *.xmind
-# *.dev
-# *.layout
+Makefile.win
+*.xmind
+*.dev
+*.layout
