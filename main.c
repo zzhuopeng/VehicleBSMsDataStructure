@@ -12,7 +12,7 @@ int main(void)
 	}
 }
 
-//æ¬¢è¿é¡µé¢ï¼šæµ‹è¯•VHDç»“æ„
+//»¶Ó­Ò³Ãæ£º²âÊÔVHD½á¹¹
 int Welcome(void)
 {
 	printf("******* Welcome to the VehicleHistoryData Structure *******\n");
@@ -75,12 +75,12 @@ int Welcome(void)
 		}
 
 		case 0: {
-			printf("\né€€å‡ºç³»ç»Ÿ");
+			printf("\nÍË³öÏµÍ³");
 			exit(EXIT_SUCCESS);
 			break;
 		}
 		default : {
-			printf("\nè¯¥é€‰æ‹©æœ‰è¯¯ï¼Œè¯·é‡æ–°é€‰æ‹©");
+			printf("\n¸ÃÑ¡ÔñÓĞÎó£¬ÇëÖØĞÂÑ¡Ôñ");
 			break;
 		}
 	}

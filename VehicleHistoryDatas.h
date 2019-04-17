@@ -2,50 +2,50 @@
 #define _VehicleHistoryDatas_H_
 
 /**
- * è¯´æ˜ï¼šè½¦è¾†å†å²æ•°æ®VHDs(Vehicle History Datas)å­˜å‚¨ç»“æ„ä½“
- 		å•ä¸ªè½¦è¾†å†å²æ•°æ®é€šè¿‡Stackå­˜å‚¨ï¼Œè½¦è¾†ä¹‹é—´å†å²æ•°æ®é€šè¿‡HashMapå­˜å‚¨ã€‚
- * æ³¨æ„ï¼šStackå’ŒPriorityQueueå®é™…ä¸Šéƒ½ä¸ºNode*;
-        è¿™é‡Œå»ºè®®ç”¨PriorityQueue PQheadè¡¨ç¤ºPriorityQueueï¼Œç”¨Stackè¡¨ç¤ºæ ˆ
-		è¿™é‡Œè¡¨å¤´PriorityQueue PQheadå’ŒStack Sä¸åŒ…å«ä»»ä½•æ•°æ®ï¼Œä¸ºå“‘èŠ‚ç‚¹
-		å¦åˆ™ï¼Œåœ¨pushæ—¶(é¦–èŠ‚ç‚¹)éœ€è¦è€ƒè™‘åŒé‡æŒ‡é’ˆé—®é¢˜
+ * ËµÃ÷£º³µÁ¾ÀúÊ·Êı¾İVHDs(Vehicle History Datas)´æ´¢½á¹¹Ìå
+ 		µ¥¸ö³µÁ¾ÀúÊ·Êı¾İÍ¨¹ıStack´æ´¢£¬³µÁ¾Ö®¼äÀúÊ·Êı¾İÍ¨¹ıHashMap´æ´¢¡£
+ * ×¢Òâ£ºStackºÍPriorityQueueÊµ¼ÊÉÏ¶¼ÎªNode*;
+        ÕâÀï½¨ÒéÓÃPriorityQueue PQhead±íÊ¾PriorityQueue£¬ÓÃStack±íÊ¾Õ»
+		ÕâÀï±íÍ·PriorityQueue PQheadºÍStack S²»°üº¬ÈÎºÎÊı¾İ£¬ÎªÑÆ½Úµã
+		·ñÔò£¬ÔÚpushÊ±(Ê×½Úµã)ĞèÒª¿¼ÂÇË«ÖØÖ¸ÕëÎÊÌâ
  */
 
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
 
-/****å®å®šä¹‰****/
-#define STACK_CAPACITY 	4	//å•ä¸ªVehicleå†å²BSMæ•°æ®ä¸ªæ•° 
+/****ºê¶¨Òå****/
+#define STACK_CAPACITY 	4	//µ¥¸öVehicleÀúÊ·BSMÊı¾İ¸öÊı 
 
-/****ç»“æ„ä½“å®šä¹‰****/
+/****½á¹¹Ìå¶¨Òå****/
 typedef struct Node* Stack;
 
-//BSMæ¶ˆæ¯
+//BSMÏûÏ¢
 typedef struct BSM {
 	int id; 			//id
-	int vehicleID; 		//è½¦è¾†ID
-	double latitude;	//è½¦è¾†çº¬åº¦
-	double longitude;	//è½¦è¾†ç»åº¦
-	long vehicleClass;	//è½¦è¾†çŠ¶æ€ï¼ˆåˆ†ç±»ï¼‰
+	int vehicleID; 		//³µÁ¾ID
+	double latitude;	//³µÁ¾Î³¶È
+	double longitude;	//³µÁ¾¾­¶È
+	long vehicleClass;	//³µÁ¾×´Ì¬£¨·ÖÀà£©
 } tBSM;
 
 typedef struct Node {
-	tBSM bsm; 			//BSMæ¶ˆæ¯
-	int StackSize;		//Stackå¤§å°
+	tBSM bsm; 			//BSMÏûÏ¢
+	int StackSize;		//Stack´óĞ¡
 	struct Node* Next;
 } tNode;
 
 
-/****æ ˆç›¸å…³æ“ä½œï¼ˆå•é“¾è¡¨ï¼‰****/
-int IsStackEmpty(Stack S); 								//åˆ¤æ–­æ˜¯å¦ä¸ºç©º
-Stack CreateStack(void);							//åˆ›å»ºä¸€ä¸ªç©ºæ ˆ
-int clearStack(Stack S);							//æ¸…é™¤æ ˆæ‰€æœ‰å…ƒç´ 
-int Top(Stack S, tBSM* topBSM);						//è·å–Stackä¸­æ ˆé¡¶å…ƒç´ 
-int Pop(Stack S); 		    						//å‡ºæ ˆ(ä»æ ˆé¡¶å¼¹å‡ºå…ƒç´ ,æ¸…é™¤æ ˆé¡¶å…ƒç´ )
-int StackQuery(Stack S, int index, tBSM* indexBSM);	//è·å–Stackä¸­ä¸‹æ ‡ä¸ºindexå…ƒç´ 
-tBSM* StackIterator(Stack S); 						//Stackéå†å™¨
-int StackPush(Stack S, tBSM bsm); 					//å…¥æ ˆï¼ˆéœ€è¦åˆ¤æ–­å®¹é‡å¤§å°ï¼Œè¶…è¿‡åˆ™éœ€è¦æŠŠæ ˆåº•å…ƒç´ å»æ‰ï¼‰
-int clearBottom(Stack S);							//åº•éƒ¨å‡ºæ ˆ
+/****Õ»Ïà¹Ø²Ù×÷£¨µ¥Á´±í£©****/
+int IsStackEmpty(Stack S); 								//ÅĞ¶ÏÊÇ·ñÎª¿Õ
+Stack CreateStack(void);							//´´½¨Ò»¸ö¿ÕÕ»
+int clearStack(Stack S);							//Çå³ıÕ»ËùÓĞÔªËØ
+int Top(Stack S, tBSM* topBSM);						//»ñÈ¡StackÖĞÕ»¶¥ÔªËØ
+int Pop(Stack S); 		    						//³öÕ»(´ÓÕ»¶¥µ¯³öÔªËØ,Çå³ıÕ»¶¥ÔªËØ)
+int StackQuery(Stack S, int index, tBSM* indexBSM);	//»ñÈ¡StackÖĞÏÂ±êÎªindexÔªËØ
+tBSM* StackIterator(Stack S); 						//Stack±éÀúÆ÷
+int StackPush(Stack S, tBSM bsm); 					//ÈëÕ»£¨ĞèÒªÅĞ¶ÏÈİÁ¿´óĞ¡£¬³¬¹ıÔòĞèÒª°ÑÕ»µ×ÔªËØÈ¥µô£©
+int clearBottom(Stack S);							//µ×²¿³öÕ»
 
 
 #endif
