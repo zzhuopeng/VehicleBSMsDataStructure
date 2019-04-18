@@ -1,4 +1,6 @@
+#include "BSM.h"
 #include "VehicleHistoryDatas.h"
+#include "MultiVehicleHistoryDatas.h"
 #include "VehiclePendingDatas.h"
 
 /****º¯ÊıÉùÃ÷****/

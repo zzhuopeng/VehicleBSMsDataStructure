@@ -39,7 +39,7 @@ Stack CreateStack(void)
 @ param	 S 栈变量
 @ return 0表示失败，1表示成功
 */
-int clearStack(Stack S)
+int ClearStack(Stack S)
 {
 	if(NULL == S) {
 		printf("clearStack: need to create stack first\n");
@@ -50,6 +50,22 @@ int clearStack(Stack S)
 			printf("clearStack: Pop(S) failed\n");
 		}
 	}
+}
+
+/**
+@ brief  销毁栈
+@ param	 S 栈变量
+@ return 0表示失败，1表示成功
+*/
+int DestroyStack(Stack S)
+{
+	if(0 == ClearBottom(S)) {
+		printf("DestroyStack: ClearBottom() failed\n");
+		return 0;
+	}
+	//销毁元素后，再销毁栈头即可
+	free(S);
+	return 1; 
 }
 
 /**
@@ -188,7 +204,7 @@ int StackPush(Stack S, tBSM bsm)
 @ param	 S栈变量
 @ return 0表示失败，1表示成功
 */
-int clearBottom(Stack S)
+int ClearBottom(Stack S)
 {
 	if(IsStackEmpty(S)) {
 		printf("clearBottom: S is empty\n");

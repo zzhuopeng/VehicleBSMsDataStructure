@@ -26,15 +26,16 @@ typedef struct Node {
 
 
 /****栈相关操作（单链表）****/
-int IsStackEmpty(Stack S); 								//判断是否为空
+int IsStackEmpty(Stack S); 							//判断是否为空
 Stack CreateStack(void);							//创建一个空栈
-int clearStack(Stack S);							//清除栈所有元素
+int ClearStack(Stack S);							//清除栈所有元素
+int DestroyStack(Stack S);							//销毁栈 
 int Top(Stack S, tBSM* topBSM);						//获取Stack中栈顶元素
 int Pop(Stack S); 		    						//出栈(从栈顶弹出元素,清除栈顶元素)
 int StackQuery(Stack S, int index, tBSM* indexBSM);	//获取Stack中下标为index元素
 int StackIterator(Stack S, tBSM* BSMs); 			//Stack遍历器
 int StackPush(Stack S, tBSM bsm); 					//入栈（需要判断容量大小，超过则需要把栈底元素去掉）
-int clearBottom(Stack S);							//底部出栈
+int ClearBottom(Stack S);							//底部出栈
 
 
 #endif
