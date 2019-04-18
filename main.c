@@ -1,8 +1,7 @@
-#include<stdio.h>
-#include<stdlib.h>
 #include "VehicleHistoryDatas.h"
 #include "VehiclePendingDatas.h"
 
+/****º¯ÊıÉùÃ÷****/
 int Welcome(void);
 
 int main(void)

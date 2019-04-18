@@ -87,7 +87,7 @@ int PQInsertBSM(PriorityQueue PQhead, tBSM bsm)
 	//达到容量，则进行删除或扩容。扩展的大小=原大小*扩容因子
 	if(IsPQFull(PQhead)) {
 
-		biggerCapacity = (int)PQhead->Size*(1+EXPENDFACTOR);//强转为int
+		biggerCapacity = (int)PQhead->Size*(1+PQ_EXPENDFACTOR);//强转为int
 
 		//若超过最大允许容量，则只能通过删除优先级最低（关键值最大）BSM，腾出空间
 		if(biggerCapacity > PQ_MAX_CAPACITY) {

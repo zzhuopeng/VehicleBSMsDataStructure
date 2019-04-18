@@ -128,23 +128,18 @@ int StackQuery(Stack S, int index, tBSM* indexBSM)
 /**
 @ brief  Stack遍历器：如果需要便利一个栈，尽量通过StackIterator实现；
 		 如果通过StackQuery函数，则时间复杂度会从O(N)增加到O(N*N)
-@ param	 S 栈变量
-@ return BSM消息数组BSM[StackSize],**用完记得free()**
+@ param	 S 栈变量, BSMs 请求的BSM消息数组对应的指针 
+@ return 0表示失败，1表示成功
 */
-tBSM* StackIterator(Stack S)
+int StackIterator(Stack S, tBSM* BSMs)
 {
 	if(IsStackEmpty(S)) {
 		printf("StackIterator: S is empty\n");
-		return NULL;
+		return 0;
 	}
-	//结构体数组，需要通过malloc创建，见《高质量C++/C编程指南》林锐
-//	tBSM* bsm = (tBSM*)malloc(S->StackSize*sizeof(tBSM));
-//	memset(bsm, 0, S->StackSize*sizeof(tBSM));
-	//这里用calloc()，就不需要用memset()了
-	tBSM* pBsm = (tBSM*)calloc(S->StackSize, sizeof(tBSM));
-	if(NULL == pBsm) {
-		printf("StackIterator: calloc failed\n");
-		return NULL;
+	if(NULL == BSMs) {
+		printf("StackIterator: pointer BSMs is NULL\n");
+		return 0;
 	}
 	//获得栈顶节点
 	tNode* pFirstNode;
@@ -152,12 +147,12 @@ tBSM* StackIterator(Stack S)
 	//结构体数组赋值
 	int index = 0;
 	while(index < S->StackSize) {
-		*(pBsm+index) = pFirstNode->bsm;
+		*(BSMs+index) = pFirstNode->bsm;
 		pFirstNode = pFirstNode->Next;
 		index++;
 	}
 	//返回结果
-	return pBsm;
+	return 1;
 }
 
 /**
