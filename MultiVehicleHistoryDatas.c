@@ -59,7 +59,7 @@ static int NextPrime(int N)
 			if( N % i == 0 )
 				goto ContOuter;
 		return N;
-		ContOuter:
+ContOuter:
 		;
 	}
 }
@@ -101,7 +101,7 @@ int HashMapDestroy(HashMap H)
 @ param	 vehicleID 车辆ID；H HashMap历史数据；pListNode查询结果
 @ return 0表示为空，1表示非空
 */
-int HashMapFind(int vehicleID, HashMap H, tListNode* pListNode)
+int HashMapFind(int vehicleID, HashMap H, Stack* S)
 {
 	EntryList E;
 	tListNode* ListHead;
@@ -115,11 +115,15 @@ int HashMapFind(int vehicleID, HashMap H, tListNode* pListNode)
 	//取出List的首节点
 	ListHead = E->Next;
 	//找对vehicleID对应的ListNode(Stack)
-	while(NULL != ListHead->Next && ListHead->singleVHDs->bsm->vehicleID) {
+	while(NULL != ListHead && ListHead->singleVHDs->bsm->vehicleID != vehicleID) {
 		ListHead = ListHead->Next;
 	}
-	//返回该值
-	pListNode = ListHead;
+	//没找到对应的Stack
+	if(NULL == ListHead) {
+		return 0;
+	}
+	//找到的话就赋值----------------------到时候别人怎么调用？？？---------------------------
+	*S = ListHead->singleVHDs;
 	return 1;
 }
 
@@ -129,28 +133,44 @@ int HashMapFind(int vehicleID, HashMap H, tListNode* pListNode)
 @ param	 bsm 要插入的bsm消息；H HashMap历史数据
 @ return 0表示为空，1表示非空
 */
-int Insert(tBSM bsm, HashMap H)
+int HashMapInsert(tBSM bsm, HashMap H)
 {
+	int i;
 	EntryList E;
 	tListNode* tmp;
 
 	if(NULL == H) {
-		printf("Insert: need to create HashMap first\n");
+		printf("HashMapInsert: need to create HashMap first\n");
 		return 0;
 	}
 	E = H->bucket[Hash(bsm->vehicleID, H->MapSize)];
-	if(NULL == E) { //该链表为空，直接插入
+	if(NULL == E) {	//该链表为空，直接插入
+		//新建一个链表节点tListNode
 		tmp = calloc(1, sizeof(tListNode));
 		if(NULL == tmp) {
-			printf("Insert: calloc for tListNode* tmp failed\n");
+			printf("HashMapInsert: calloc for tListNode* tmp failed\n");
 			return 0;
 		}
-		//新建一个Stack，并插入bsm数据
+		//为新的tListNode新建一个Stack，并插入bsm数据
 		tmp->singleVHDs = CreateStack();
-		tmp-> --------------------------------------------------------
+		if(0 == StackPush(tmp->singleVHDs, bsm)) {
+			printf("HashMapInsert: StackPush() for newStack failed\n");
+			return 0;
+		}
 		tmp->Next = NULL;
-	} else {
-
+		//将新tListNode插入该链表
+		E->Next = tmp;
+	} else {		//该链表不为空
+		//遍历该链表，找具有相同VehicleID的Stack,先取出List的首节点
+		tmp = E->Next;
+		//找对vehicleID对应的ListNode(Stack)
+		while(NULL != tmp->Next && tmp->singleVHDs->bsm->vehicleID) {
+			ListHead = tmp->Next;
+		}
+		//返回该值
+		pListNode = ListHead;
+		while(NULL != E && E) {
+		}
 	}
 }
 
@@ -159,10 +179,10 @@ int Insert(tBSM bsm, HashMap H)
 @ param	 H 需要扩容的HashMap
 @ return 扩容后的HashMap
 */
-HashMap HashMapReHash(HashMap H)
-{
-
-}
+//HashMap HashMapReHash(HashMap H)
+//{
+//
+//}
 
 /**
 @ brief  Hash函数，将Key转换为Index（static函数）
