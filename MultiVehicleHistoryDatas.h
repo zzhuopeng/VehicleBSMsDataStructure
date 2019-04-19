@@ -40,7 +40,7 @@ HashMap HashMapInitialize(int size);							//初始化HashMap
 int HashMapDestroy(HashMap H);									//销毁HashMap
 int HashMapFind(int vehicleID, HashMap H, tListNode* pListNode);//查询Key(vehiceID)对应的ListNode(Stack)
 int HashMapInsert(tBSM bsm, HashMap H);							//插入历史BSM消息 
-//HashMap HashMapReHash(HashMap H);								//HashMap动态扩容 
+HashMap HashMapReHash(HashMap H);								//HashMap动态扩容 
 
 
 #endif
