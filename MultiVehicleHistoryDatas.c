@@ -98,7 +98,7 @@ int HashMapDestroy(HashMap H)
 
 /**
 @ brief  查询Key(vehiceID)对应的ListNode(Stack)
-@ param	 vehicleID 车辆ID；H HashMap历史数据；pListNode查询结果
+@ param	 vehicleID 车辆ID；H HashMap历史数据；S查询结果（双重指针）
 @ return 0表示为空，1表示非空
 */
 int HashMapFind(int vehicleID, HashMap H, Stack* S)
@@ -114,7 +114,7 @@ int HashMapFind(int vehicleID, HashMap H, Stack* S)
 	E = H->bucket[Hash(vehicleID, H->MapSize)];
 	//取出List的首节点
 	ListHead = E->Next;
-	//找对vehicleID对应的ListNode(Stack)
+	//找对vehicleID对应的ListNode(Stack)-----------------tmp->singleVHDs->bsm Stack头有没有bsm????------
 	while(NULL != ListHead && ListHead->singleVHDs->bsm->vehicleID != vehicleID) {
 		ListHead = ListHead->Next;
 	}
@@ -122,7 +122,7 @@ int HashMapFind(int vehicleID, HashMap H, Stack* S)
 	if(NULL == ListHead) {
 		return 0;
 	}
-	//找到的话就赋值----------------------到时候别人怎么调用？？？---------------------------
+	//找到的话就赋值-------（这里S为双重Node指针，使用时注意）------
 	*S = ListHead->singleVHDs;
 	return 1;
 }
@@ -160,17 +160,39 @@ int HashMapInsert(tBSM bsm, HashMap H)
 		tmp->Next = NULL;
 		//将新tListNode插入该链表
 		E->Next = tmp;
+		return 1;
 	} else {		//该链表不为空
 		//遍历该链表，找具有相同VehicleID的Stack,先取出List的首节点
 		tmp = E->Next;
-		//找对vehicleID对应的ListNode(Stack)
-		while(NULL != tmp->Next && tmp->singleVHDs->bsm->vehicleID) {
-			ListHead = tmp->Next;
+		//找对vehicleID对应的ListNode(Stack)-----------------tmp->singleVHDs->bsm Stack头有没有bsm????------
+		while(NULL != tmp && tmp->singleVHDs->bsm->vehicleID!=bsm->vehicleID) {
+			tmp = tmp->Next;
 		}
-		//返回该值
-		pListNode = ListHead;
-		while(NULL != E && E) {
+		//没找到对应的Stack，应该创建一个Stack再插入链表（表头插入）中
+		if(NULL == tmp) {
+			//新建一个链表节点tListNode
+			tmp = calloc(1, sizeof(tListNode));
+			if(NULL == tmp) {
+				printf("HashMapInsert: calloc for tListNode* tmp failed\n");
+				return 0;
+			}
+			//为新的tListNode新建一个Stack，并插入bsm数据
+			tmp->singleVHDs = CreateStack();
+			if(0 == StackPush(tmp->singleVHDs, bsm)) {
+				printf("HashMapInsert: StackPush() for newStack failed\n");
+				return 0;
+			}
+			//将新tListNode插入该链表
+			tmp->Next = E->Next;
+			E->Next = tmp;
+			return 1;
 		}
+		//找到就往Stack中插入bsm
+		if(0 == StackPush(tmp->singleVHDs, bsm)) {
+			printf("HashMapInsert: StackPush() for newStack failed\n");
+			return 0;
+		}
+		return 1;
 	}
 }
 
