@@ -14,6 +14,9 @@ typedef struct BSM {
 	int vehicleID; 		//车辆ID
 	double latitude;	//车辆纬度
 	double longitude;	//车辆经度
+	float elevation;    //海拔
+	float speed;        //速度
+	float heading;      //航向角
 	long vehicleClass;	//车辆状态（分类）
 } tBSM;
 

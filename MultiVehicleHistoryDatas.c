@@ -114,6 +114,10 @@ int HashMapFind(int vehicleID, HashMap H, Stack* S)
         printf("HashMapFind: need to create HashMap first\n");
         return 0;
     }
+    if(NULL == S) {
+        printf("HashMapFind: Stack* S must be initialized before use\n");
+        return 0;
+    }
     //找到对应的List
     E = H->bucket[Hash(vehicleID, H->MapSize)];
     //取出List的首节点
@@ -180,7 +184,7 @@ int HashMapInsert(tBSM bsm, HashMap H)
     }
     return 1;
 }
-}
+
 
 /**
 @ brief  HashMap动态扩容
