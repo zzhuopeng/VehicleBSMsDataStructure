@@ -1,11 +1,11 @@
 #include "VehiclePendingDatas.h"
 
-/**************ÓÅÏÈ¼¶¶ÓÁĞÏà¹Ø²Ù×÷***************/
+/**************ä¼˜å…ˆçº§é˜Ÿåˆ—ç›¸å…³æ“ä½œ***************/
 
 /**
-@ brief  ³õÊ¼»¯ ÓÅÏÈ¼¶¶ÓÁĞ£¨¶Ñ£©
-@ param	 capacity ÓÅÏÈ¼¶¶ÓÁĞ³õÊ¼»¯ÈİÁ¿
-@ return PriorityQueue ÓÅÏÈ¼¶¶ÓÁĞ ¶ÓÊ×
+@ brief  åˆå§‹åŒ– ä¼˜å…ˆçº§é˜Ÿåˆ—ï¼ˆå †ï¼‰
+@ param	 capacity ä¼˜å…ˆçº§é˜Ÿåˆ—åˆå§‹åŒ–å®¹é‡
+@ return PriorityQueue ä¼˜å…ˆçº§é˜Ÿåˆ— é˜Ÿé¦–
 */
 PriorityQueue PQInitialize(int capacity)
 {
@@ -18,13 +18,13 @@ PriorityQueue PQInitialize(int capacity)
 		printf("PQInitialize: Priority Queue size is too large\n");
 		return NULL;
 	}
-	//PQ·ÖÅä¶Ñ¿Õ¼ä
+	//PQåˆ†é…å †ç©ºé—´
 	H = calloc(1, sizeof(tHeapStruct));
 	if(NULL == H) {
 		printf("PQInitialize: calloc for H failed\n");
 		return NULL;
 	}
-	//Êı×é·ÖÅä¶Ñ¿Õ¼ä(Êı×éµÚ0¸öÔªËØÊÇsentinel±ê¼Ç½Úµã£¬²»ËãÈëcapacityºÍsize)
+	//æ•°ç»„åˆ†é…å †ç©ºé—´(æ•°ç»„ç¬¬0ä¸ªå…ƒç´ æ˜¯sentinelæ ‡è®°èŠ‚ç‚¹ï¼Œä¸ç®—å…¥capacityå’Œsize)
 	H->BSMs = calloc(capacity + 1, sizeof(tBSM));
 	if(NULL == H->BSMs) {
 		printf("PQInitialize: calloc for H->BSMs failed\n");
@@ -37,9 +37,9 @@ PriorityQueue PQInitialize(int capacity)
 }
 
 /**
-@ brief  Ïú»Ù ÓÅÏÈ¼¶¶ÓÁĞ£¨¶Ñ£©
-@ param	 PQhead ÓÅÏÈ¼¶¶ÓÁĞ ¶ÓÊ×
-@ return 0±íÊ¾Ê§°Ü£¬1±íÊ¾³É¹¦
+@ brief  é”€æ¯ ä¼˜å…ˆçº§é˜Ÿåˆ—ï¼ˆå †ï¼‰
+@ param	 PQhead ä¼˜å…ˆçº§é˜Ÿåˆ— é˜Ÿé¦–
+@ return 0è¡¨ç¤ºå¤±è´¥ï¼Œ1è¡¨ç¤ºæˆåŠŸ
 */
 int PQDestroy(PriorityQueue PQhead)
 {
@@ -53,9 +53,9 @@ int PQDestroy(PriorityQueue PQhead)
 }
 
 /**
-@ brief  ÖÃ¿Õ ÓÅÏÈ¼¶¶ÓÁĞ£¨¶Ñ£©
-@ param	 PQhead ÓÅÏÈ¼¶¶ÓÁĞ ¶ÓÊ×
-@ return 0±íÊ¾Ê§°Ü£¬1±íÊ¾³É¹¦
+@ brief  ç½®ç©º ä¼˜å…ˆçº§é˜Ÿåˆ—ï¼ˆå †ï¼‰
+@ param	 PQhead ä¼˜å…ˆçº§é˜Ÿåˆ— é˜Ÿé¦–
+@ return 0è¡¨ç¤ºå¤±è´¥ï¼Œ1è¡¨ç¤ºæˆåŠŸ
 */
 int PQMakeEmpty(PriorityQueue PQhead)
 {
@@ -68,28 +68,28 @@ int PQMakeEmpty(PriorityQueue PQhead)
 }
 
 /**
-@ brief  Èë¶Ó£º²åÈë³µÁ¾BSMÏûÏ¢
-@ param	 PQhead ÓÅÏÈ¼¶¶ÓÁĞ ¶ÓÊ×£»bsm Èë¶ÓµÄBSMÏûÏ¢
-@ return 0±íÊ¾Ê§°Ü£¬1±íÊ¾³É¹¦
+@ brief  å…¥é˜Ÿï¼šæ’å…¥è½¦è¾†BSMæ¶ˆæ¯
+@ param	 PQhead ä¼˜å…ˆçº§é˜Ÿåˆ— é˜Ÿé¦–ï¼›bsm å…¥é˜Ÿçš„BSMæ¶ˆæ¯
+@ return 0è¡¨ç¤ºå¤±è´¥ï¼Œ1è¡¨ç¤ºæˆåŠŸ
 */
 int PQInsertBSM(PriorityQueue PQhead, tBSM bsm)
 {
 	tBSM* biggerBSM = NULL;
 	int biggerCapacity = 0;
 	int i;
-	//ÁÙÊ±ÓÃÓÚ´æ´¢±»É¾³ıµÄmaxBSM
+	//ä¸´æ—¶ç”¨äºå­˜å‚¨è¢«åˆ é™¤çš„maxBSM
 	tBSM* maxBSM = calloc(1, sizeof(tBSM));
 	if(NULL == maxBSM) {
 		printf("PQInsertBSM: maxBSM calloc() failed\n");
 		return 0;
 	}
 
-	//´ïµ½ÈİÁ¿£¬Ôò½øĞĞÉ¾³ı»òÀ©Èİ¡£À©Õ¹µÄ´óĞ¡=Ô­´óĞ¡*À©ÈİÒò×Ó
+	//è¾¾åˆ°å®¹é‡ï¼Œåˆ™è¿›è¡Œåˆ é™¤æˆ–æ‰©å®¹ã€‚æ‰©å±•çš„å¤§å°=åŸå¤§å°*æ‰©å®¹å› å­
 	if(IsPQFull(PQhead)) {
 
-		biggerCapacity = (int)PQhead->Size*(1+PQ_EXPENDFACTOR);//Ç¿×ªÎªint
+		biggerCapacity = (int)PQhead->Size*(1+PQ_EXPENDFACTOR);//å¼ºè½¬ä¸ºint
 
-		//Èô³¬¹ı×î´óÔÊĞíÈİÁ¿£¬ÔòÖ»ÄÜÍ¨¹ıÉ¾³ıÓÅÏÈ¼¶×îµÍ£¨¹Ø¼üÖµ×î´ó£©BSM£¬ÌÚ³ö¿Õ¼ä
+		//è‹¥è¶…è¿‡æœ€å¤§å…è®¸å®¹é‡ï¼Œåˆ™åªèƒ½é€šè¿‡åˆ é™¤ä¼˜å…ˆçº§æœ€ä½ï¼ˆå…³é”®å€¼æœ€å¤§ï¼‰BSMï¼Œè…¾å‡ºç©ºé—´
 		if(biggerCapacity > PQ_MAX_CAPACITY) {
 			printf("PQInsertBSM: biggerCapacity is > PQ_MAX_CAPACITY, need to PQDeleteMaxBSM()\n");
 			if(0 == PQDeleteMaxBSM(PQhead, maxBSM)) {
@@ -97,39 +97,39 @@ int PQInsertBSM(PriorityQueue PQhead, tBSM bsm)
 				return 0;
 			}
 		}
-		//Î´³¬¹ı×î´óÔÊĞíÈİÁ¿£¬Ôò½øĞĞÀ©Èİ
+		//æœªè¶…è¿‡æœ€å¤§å…è®¸å®¹é‡ï¼Œåˆ™è¿›è¡Œæ‰©å®¹
 		if(biggerCapacity <= PQ_MAX_CAPACITY) {
-			biggerBSM = realloc(PQhead->BSMs, (biggerCapacity+1)*sizeof(tBSM));//¼Ó1ÊÇÎªÁËÉÚ±ø½Úµã
-			if(NULL == biggerBSM) {  //·ÖÅäÊ§°Ü£¬Ö»ÄÜÍ¨¹ıÉ¾³ıÓÅÏÈ¼¶×îµÍ£¨¹Ø¼üÖµ×î´ó£©BSM£¬ÌÚ³ö¿Õ¼ä
+			biggerBSM = realloc(PQhead->BSMs, (biggerCapacity+1)*sizeof(tBSM));//åŠ 1æ˜¯ä¸ºäº†å“¨å…µèŠ‚ç‚¹
+			if(NULL == biggerBSM) {  //åˆ†é…å¤±è´¥ï¼Œåªèƒ½é€šè¿‡åˆ é™¤ä¼˜å…ˆçº§æœ€ä½ï¼ˆå…³é”®å€¼æœ€å¤§ï¼‰BSMï¼Œè…¾å‡ºç©ºé—´
 				printf("PQInsertBSM: biggerBSM realloc() failed, need to PQDeleteMaxBSM()\n");
 				if(0 == PQDeleteMaxBSM(PQhead, maxBSM)) {
 					printf("PQInsertBSM: PQDeleteMaxBSM() failed\n\n");
 					return 0;
 				}
-			} else { //À©Èİ³É¹¦
+			} else { //æ‰©å®¹æˆåŠŸ
 				PQhead->BSMs = biggerBSM;
 				PQhead->Capacity = biggerCapacity;
 			}
 		}
 	}
-	//¼ÇµÃÊÍ·ÅÄÚ´æ
+	//è®°å¾—é‡Šæ”¾å†…å­˜
 	free(maxBSM);
-	//²åÈëBSMÏûÏ¢µ½Êı×é×îºó£¨ÉÏÂË£©
+	//æ’å…¥BSMæ¶ˆæ¯åˆ°æ•°ç»„æœ€åï¼ˆä¸Šæ»¤ï¼‰
 	for(i=++PQhead->Size; PQComputeKey(PQhead->BSMs[i/2])>PQComputeKey(bsm) && i<=1; i/=2) {
-		PQhead->BSMs[i] = PQhead->BSMs[i/2];//½«¸¸½ÚµãÏòÏÂÒÆ¶¯
+		PQhead->BSMs[i] = PQhead->BSMs[i/2];//å°†çˆ¶èŠ‚ç‚¹å‘ä¸‹ç§»åŠ¨
 	}
 	PQhead->BSMs[i] = bsm;
 	return 1;
 }
 
 /**
-@ brief  ¼ÆËãBSMÏûÏ¢µÄÓÅÏÈ¼¶£¨keyÔ½Ğ¡£¬ÓÅÏÈ¼¶Ô½¸ß£©
-@ param	 PQhead ÓÅÏÈ¼¶¶ÓÁĞ ¶ÓÊ×
-@ return 0±íÊ¾Ê§°Ü£¬1±íÊ¾³É¹¦
+@ brief  è®¡ç®—BSMæ¶ˆæ¯çš„ä¼˜å…ˆçº§ï¼ˆkeyè¶Šå°ï¼Œä¼˜å…ˆçº§è¶Šé«˜ï¼‰
+@ param	 PQhead ä¼˜å…ˆçº§é˜Ÿåˆ— é˜Ÿé¦–
+@ return 0è¡¨ç¤ºå¤±è´¥ï¼Œ1è¡¨ç¤ºæˆåŠŸ
 */
 double PQComputeKey(tBSM bsm)
 {
-	//HVµÄBSMÏûÏ¢£¬ÓÃÓÚÄ£Äâ¼ÆËãÓÅÏÈ¼¶
+	//HVçš„BSMæ¶ˆæ¯ï¼Œç”¨äºæ¨¡æ‹Ÿè®¡ç®—ä¼˜å…ˆçº§
 	tBSM HV_BSM;
 	HV_BSM.id = 0;
 	HV_BSM.latitude =  0.0;
@@ -137,23 +137,23 @@ double PQComputeKey(tBSM bsm)
 	HV_BSM.vehicleClass = 10000;
 	HV_BSM.vehicleID = 0;
 
-	//ÅÅĞò±ê×¼£º¢Ù³µÁ¾×´Ì¬£¨×´Ì¬ÂëÔ½Ğ¡£¬ÓÅÏÈ¼¶Ô½¸ß£»Õı³£×´Ì¬Âë×î´ó£©
-	//			¢ÚRV¾àÀëHVµÄ¾àÀë£¨RV¾àÀëHVÔ½½ü£¬ÓÅÏÈ¼¶Ô½¸ß£©
+	//æ’åºæ ‡å‡†ï¼šâ‘ è½¦è¾†çŠ¶æ€ï¼ˆçŠ¶æ€ç è¶Šå°ï¼Œä¼˜å…ˆçº§è¶Šé«˜ï¼›æ­£å¸¸çŠ¶æ€ç æœ€å¤§ï¼‰
+	//			â‘¡RVè·ç¦»HVçš„è·ç¦»ï¼ˆRVè·ç¦»HVè¶Šè¿‘ï¼Œä¼˜å…ˆçº§è¶Šé«˜ï¼‰
 
-	//Å·Ê½¾àÀë£¬ĞèÒªÆ½·½£¬¼ÆËãÁ¿½Ï´ó£¨Ôİ²»ÓÃ£©
+	//æ¬§å¼è·ç¦»ï¼Œéœ€è¦å¹³æ–¹ï¼Œè®¡ç®—é‡è¾ƒå¤§ï¼ˆæš‚ä¸ç”¨ï¼‰
 //	return pow((bsm.latitude-HV_BSM->latitude), 2)
 //	       + pow((bsm.longitude-HV_BSM->longitude), 2)
 //	       + bsm.vehicleClass;
-	//Âü¹ş¶Ù¾àÀë
+	//æ›¼å“ˆé¡¿è·ç¦»
 	return (bsm.latitude-HV_BSM.latitude)
 	       + (bsm.longitude-HV_BSM.longitude)
 	       + bsm.vehicleClass;
 }
 
 /**
-@ brief  ³ö¶Ó£ºÉ¾³ıÓÅÏÈ¼¶×î¸ß£¨¹Ø¼ü×Ö×îĞ¡£©BSMÏûÏ¢
-@ param	 PQhead ÓÅÏÈ¼¶¶ÓÁĞ ¶ÓÊ×, topBSM ÓÅÏÈ¼¶×î¸ßµÄBSMÏûÏ¢Ö¸Õë
-@ return 0±íÊ¾Ê§°Ü£¬1±íÊ¾³É¹¦
+@ brief  å‡ºé˜Ÿï¼šåˆ é™¤ä¼˜å…ˆçº§æœ€é«˜ï¼ˆå…³é”®å­—æœ€å°ï¼‰BSMæ¶ˆæ¯
+@ param	 PQhead ä¼˜å…ˆçº§é˜Ÿåˆ— é˜Ÿé¦–, topBSM ä¼˜å…ˆçº§æœ€é«˜çš„BSMæ¶ˆæ¯æŒ‡é’ˆ
+@ return 0è¡¨ç¤ºå¤±è´¥ï¼Œ1è¡¨ç¤ºæˆåŠŸ
 */
 int PQDeleteMinBSM(PriorityQueue PQhead, tBSM* topBSM)
 {
@@ -164,36 +164,36 @@ int PQDeleteMinBSM(PriorityQueue PQhead, tBSM* topBSM)
 		printf("PQDeleteMinBSM: PQhead is empty\n");
 		return 0;
 	}
-	//ÏÈ¼ÇÂ¼ÏÂÀ´
+	//å…ˆè®°å½•ä¸‹æ¥
 	*topBSM = PQhead->BSMs[1];
 	LastBSM = PQhead->BSMs[PQhead->Size];
-	//Çå³ı×îºóÒ»¸ö½Úµã£¨»òÕßÖ±½ÓÔÚinsertÊ±¸²¸Ç£¿£©
+	//æ¸…é™¤æœ€åä¸€ä¸ªèŠ‚ç‚¹ï¼ˆæˆ–è€…ç›´æ¥åœ¨insertæ—¶è¦†ç›–ï¼Ÿï¼‰
 	memset(PQhead->BSMs+PQhead->Size, 0, sizeof(tBSM));
 	PQhead->Size--;
-	//£¨½«×îºóÒ»¸ö½Úµã£¬µ±³É¸ù½Úµã£©ÏÂÂË
+	//ï¼ˆå°†æœ€åä¸€ä¸ªèŠ‚ç‚¹ï¼Œå½“æˆæ ¹èŠ‚ç‚¹ï¼‰ä¸‹æ»¤
 	for(i=1; i*2<=PQhead->Size; i=Child) {
-		//±È½Ï×óÓÒ×Ó½ÚµãµÄ´óĞ¡,ÕÒĞ¡µÄ×Ó½Úµã
+		//æ¯”è¾ƒå·¦å³å­èŠ‚ç‚¹çš„å¤§å°,æ‰¾å°çš„å­èŠ‚ç‚¹
 		Child = i*2;
 		if(Child!=PQhead->Size &&
 		   PQComputeKey(PQhead->BSMs[Child]) > PQComputeKey(PQhead->BSMs[Child+1])) {
 			Child++;
 		}
-		//ÏÂÂË
+		//ä¸‹æ»¤
 		if(PQComputeKey(LastBSM) > PQComputeKey(PQhead->BSMs[Child])) {
 			PQhead->BSMs[i] = PQhead->BSMs[Child];
 		} else {
-			break;//·ñÔòÌø³öforÑ­»·
+			break;//å¦åˆ™è·³å‡ºforå¾ªç¯
 		}
 	}
-	//½«¸Ã½Úµã·Åµ½ºÏÊÊÎ»ÖÃ
+	//å°†è¯¥èŠ‚ç‚¹æ”¾åˆ°åˆé€‚ä½ç½®
 	PQhead->BSMs[i] = LastBSM;
 	return 1;
 }
 
 /**
-@ brief  ²éÑ¯£ºÓÅÏÈ¼¶×î¸ß£¨¹Ø¼ü×Ö×îĞ¡£©BSMÏûÏ¢
-@ param	 PQhead ÓÅÏÈ¼¶¶ÓÁĞ ¶ÓÊ×, topBSM ÓÅÏÈ¼¶×î¸ßµÄBSMÏûÏ¢Ö¸Õë
-@ return 0±íÊ¾Ê§°Ü£¬1±íÊ¾³É¹¦
+@ brief  æŸ¥è¯¢ï¼šä¼˜å…ˆçº§æœ€é«˜ï¼ˆå…³é”®å­—æœ€å°ï¼‰BSMæ¶ˆæ¯
+@ param	 PQhead ä¼˜å…ˆçº§é˜Ÿåˆ— é˜Ÿé¦–, topBSM ä¼˜å…ˆçº§æœ€é«˜çš„BSMæ¶ˆæ¯æŒ‡é’ˆ
+@ return 0è¡¨ç¤ºå¤±è´¥ï¼Œ1è¡¨ç¤ºæˆåŠŸ
 */
 int PQQueryMinBSM(PriorityQueue PQhead, tBSM* topBSM)
 {
@@ -206,9 +206,9 @@ int PQQueryMinBSM(PriorityQueue PQhead, tBSM* topBSM)
 }
 
 /**
-@ brief  ³ö¶Ó£ºÉ¾³ıÓÅÏÈ¼¶×îµÍ£¨¹Ø¼ü×Ö×î´ó£©BSMÏûÏ¢ {±éÀúÊı×éÊµÏÖ}
-@ param	 PQhead ÓÅÏÈ¼¶¶ÓÁĞ ¶ÓÊ×, bottomBSM ÓÅÏÈ¼¶×îµÍµÄBSMÏûÏ¢Ö¸Õë
-@ return 0±íÊ¾Ê§°Ü£¬1±íÊ¾³É¹¦
+@ brief  å‡ºé˜Ÿï¼šåˆ é™¤ä¼˜å…ˆçº§æœ€ä½ï¼ˆå…³é”®å­—æœ€å¤§ï¼‰BSMæ¶ˆæ¯ {éå†æ•°ç»„å®ç°}
+@ param	 PQhead ä¼˜å…ˆçº§é˜Ÿåˆ— é˜Ÿé¦–, bottomBSM ä¼˜å…ˆçº§æœ€ä½çš„BSMæ¶ˆæ¯æŒ‡é’ˆ
+@ return 0è¡¨ç¤ºå¤±è´¥ï¼Œ1è¡¨ç¤ºæˆåŠŸ
 */
 int PQDeleteMaxBSM(PriorityQueue PQhead, tBSM* bottomBSM)
 {
@@ -219,7 +219,7 @@ int PQDeleteMaxBSM(PriorityQueue PQhead, tBSM* bottomBSM)
 		printf("PQDeleteMaxBSM: PQhead is empty\n");
 		return 0;
 	}
-	//ÕÒµ½ÓÅÏÈ¼¶×îµÍµÄBSM,²¢¼ÇÂ¼ÏÂ±êMaxIndex
+	//æ‰¾åˆ°ä¼˜å…ˆçº§æœ€ä½çš„BSM,å¹¶è®°å½•ä¸‹æ ‡MaxIndex
 	i = (int)PQhead->Size/2+1;
 	MaxIndex = i;
 	MaxBSM = PQhead->BSMs[i];
@@ -230,25 +230,25 @@ int PQDeleteMaxBSM(PriorityQueue PQhead, tBSM* bottomBSM)
 		}
 	}
 	*bottomBSM = MaxBSM;
-	//ÏÈ¼ÇÂ¼×îºóÒ»¸ö½Úµã£¬ÓÃÓÚÌî³äMaxBSMÉ¾³ıºóµÄ¿ÕÈ±
+	//å…ˆè®°å½•æœ€åä¸€ä¸ªèŠ‚ç‚¹ï¼Œç”¨äºå¡«å……MaxBSMåˆ é™¤åçš„ç©ºç¼º
 	LastBSM = PQhead->BSMs[PQhead->Size];
-	//Çå³ı×îºóÒ»¸ö½Úµã£¨»òÕßÖ±½ÓÔÚinsertÊ±¸²¸Ç£¿£©
+	//æ¸…é™¤æœ€åä¸€ä¸ªèŠ‚ç‚¹ï¼ˆæˆ–è€…ç›´æ¥åœ¨insertæ—¶è¦†ç›–ï¼Ÿï¼‰
 	memset(PQhead->BSMs+PQhead->Size, 0, sizeof(tBSM));
 	PQhead->Size--;
-	//(½«×îºóÒ»¸ö½ÚµãLastBSM£¬´ÓÔ­À´MaxBSMÎ»ÖÃ)ÉÏÂË
+	//(å°†æœ€åä¸€ä¸ªèŠ‚ç‚¹LastBSMï¼Œä»åŸæ¥MaxBSMä½ç½®)ä¸Šæ»¤
 	for(i=MaxIndex; PQComputeKey(PQhead->BSMs[i/2])>PQComputeKey(LastBSM) && i<=1; i/=2) {
-		PQhead->BSMs[i] = PQhead->BSMs[i/2];//½«¸¸½ÚµãÏòÏÂÒÆ¶¯
+		PQhead->BSMs[i] = PQhead->BSMs[i/2];//å°†çˆ¶èŠ‚ç‚¹å‘ä¸‹ç§»åŠ¨
 	}
-	//½«¸Ã½Úµã·Åµ½ºÏÊÊÎ»ÖÃ
+	//å°†è¯¥èŠ‚ç‚¹æ”¾åˆ°åˆé€‚ä½ç½®
 	PQhead->BSMs[i] = LastBSM;
 
 	return 1;
 }
 
 /**
-@ brief  ²éÑ¯£ºÓÅÏÈ¼¶×îµÍ£¨¹Ø¼ü×Ö×î´ó£©BSMÏûÏ¢ {±éÀúÊı×éÊµÏÖ}
-@ param	 PQhead ÓÅÏÈ¼¶¶ÓÁĞ ¶ÓÊ×, bottomBSM ÓÅÏÈ¼¶×îµÍµÄBSMÏûÏ¢Ö¸Õë
-@ return 0±íÊ¾Ê§°Ü£¬1±íÊ¾³É¹¦
+@ brief  æŸ¥è¯¢ï¼šä¼˜å…ˆçº§æœ€ä½ï¼ˆå…³é”®å­—æœ€å¤§ï¼‰BSMæ¶ˆæ¯ {éå†æ•°ç»„å®ç°}
+@ param	 PQhead ä¼˜å…ˆçº§é˜Ÿåˆ— é˜Ÿé¦–, bottomBSM ä¼˜å…ˆçº§æœ€ä½çš„BSMæ¶ˆæ¯æŒ‡é’ˆ
+@ return 0è¡¨ç¤ºå¤±è´¥ï¼Œ1è¡¨ç¤ºæˆåŠŸ
 */
 int PQQueryMaxBSM(PriorityQueue PQhead, tBSM* bottomBSM)
 {
@@ -262,7 +262,7 @@ int PQQueryMaxBSM(PriorityQueue PQhead, tBSM* bottomBSM)
 
 	i = (int)PQhead->Size/2+1;
 	MaxBSM = PQhead->BSMs[i];
-	//×î´óÖµÒ»¶¨ÔÚÊ÷Ò¶ÉÏ£¬Ò¶×Ó½Úµã·¶Î§Îª(n/2+1~n),ÏÂ±ê´Ó1¿ªÊ¼
+	//æœ€å¤§å€¼ä¸€å®šåœ¨æ ‘å¶ä¸Šï¼Œå¶å­èŠ‚ç‚¹èŒƒå›´ä¸º(n/2+1~n),ä¸‹æ ‡ä»1å¼€å§‹
 	for(i=i+1; i<=PQhead->Size; i++) {
 		if(PQComputeKey(PQhead->BSMs[i]) > PQComputeKey(MaxBSM)) {
 			MaxBSM = PQhead->BSMs[i];
@@ -273,10 +273,10 @@ int PQQueryMaxBSM(PriorityQueue PQhead, tBSM* bottomBSM)
 }
 
 /**
-@ brief  ¸üĞÂHVµÄBSMÏûÏ¢ºó£¬ĞèÒª¶ÔÓÅÏÈ¼¶¶ÓÁĞ½øĞĞÖØÅÅĞò
-		ÎªÁË±ÜÃâPQhead¶ÔÓ¦¶Ñ¿Õ¼äµÄÆµ·±Ïú»Ù¡¢ÖØ½¨£¬¿¼ÂÇÖ»¸Ä±äBSMs¶ÔÓ¦Êı×éµÄÄÚÈİ£¬ÊµÏÖÖØÅÅĞò
-@ param	 PQhead ÓÅÏÈ¼¶¶ÓÁĞ ¶ÓÊ×
-@ return 0±íÊ¾Ê§°Ü£¬1±íÊ¾³É¹¦
+@ brief  æ›´æ–°HVçš„BSMæ¶ˆæ¯åï¼Œéœ€è¦å¯¹ä¼˜å…ˆçº§é˜Ÿåˆ—è¿›è¡Œé‡æ’åº
+		ä¸ºäº†é¿å…PQheadå¯¹åº”å †ç©ºé—´çš„é¢‘ç¹é”€æ¯ã€é‡å»ºï¼Œè€ƒè™‘åªæ”¹å˜BSMså¯¹åº”æ•°ç»„çš„å†…å®¹ï¼Œå®ç°é‡æ’åº
+@ param	 PQhead ä¼˜å…ˆçº§é˜Ÿåˆ— é˜Ÿé¦–
+@ return 0è¡¨ç¤ºå¤±è´¥ï¼Œ1è¡¨ç¤ºæˆåŠŸ
 */
 int PQReSort(PriorityQueue PQhead)
 {
@@ -285,14 +285,14 @@ int PQReSort(PriorityQueue PQhead)
 		printf("PQReSort: PQhead is empty\n");
 		return 0;
 	}
-	//Çå¿ÕÊı×é£¨²»ÊÇÕæµÄÇå¿Õ£©
+	//æ¸…ç©ºæ•°ç»„ï¼ˆä¸æ˜¯çœŸçš„æ¸…ç©ºï¼‰
 	size = PQhead->Size;
 	if(0 == PQMakeEmpty(PQhead)) {
 		printf("PQReSort: PQMakeEmpty() failded\n");
 		return 0;
 	}
-	//½«Ô­Êı×éÖĞÔªËØ£¬Ö±½Ó´ÓĞÂ·Å½øÇå¿ÕºóµÄPQhead(´Ó1µ½n£¬Ò»¸öÒ»¸öÌî³ä)
-	//ÕâÑù¾Í²»ÓÃÕû¸ö½«BSMsÊı×éÈ«²¿¸´ÖÆÏÂÀ´£¬È»ºóÒ»¸ö¸ö²åÈë
+	//å°†åŸæ•°ç»„ä¸­å…ƒç´ ï¼Œç›´æ¥ä»æ–°æ”¾è¿›æ¸…ç©ºåçš„PQhead(ä»1åˆ°nï¼Œä¸€ä¸ªä¸€ä¸ªå¡«å……)
+	//è¿™æ ·å°±ä¸ç”¨æ•´ä¸ªå°†BSMsæ•°ç»„å…¨éƒ¨å¤åˆ¶ä¸‹æ¥ï¼Œç„¶åä¸€ä¸ªä¸ªæ’å…¥
 	for(i=1; i<=size; i++) {
 		PQInsertBSM(PQhead, PQhead->BSMs[i]);
 	}
@@ -300,9 +300,9 @@ int PQReSort(PriorityQueue PQhead)
 }
 
 /**
-@ brief  ÅĞ¶ÏÓÅÏÈ¼¶¶ÓÁĞÊÇ·ñÎª¿Õ
-@ param	 PQhead ÓÅÏÈ¼¶¶ÓÁĞ ¶ÓÊ×
-@ return 0±íÊ¾Îª¿Õ£¬1±íÊ¾·Ç¿Õ
+@ brief  åˆ¤æ–­ä¼˜å…ˆçº§é˜Ÿåˆ—æ˜¯å¦ä¸ºç©º
+@ param	 PQhead ä¼˜å…ˆçº§é˜Ÿåˆ— é˜Ÿé¦–
+@ return 0è¡¨ç¤ºä¸ºç©ºï¼Œ1è¡¨ç¤ºéç©º
 */
 int IsPQEmpty(PriorityQueue PQhead)
 {
@@ -310,9 +310,9 @@ int IsPQEmpty(PriorityQueue PQhead)
 }
 
 /**
-@ brief  ÅĞ¶ÏÓÅÏÈ¼¶¶ÓÁĞÊÇ·ñÒÑÂú
-@ param	 PQhead ÓÅÏÈ¼¶¶ÓÁĞ ¶ÓÊ×
-@ return 0±íÊ¾Îª¿Õ£¬1±íÊ¾·Ç¿Õ
+@ brief  åˆ¤æ–­ä¼˜å…ˆçº§é˜Ÿåˆ—æ˜¯å¦å·²æ»¡
+@ param	 PQhead ä¼˜å…ˆçº§é˜Ÿåˆ— é˜Ÿé¦–
+@ return 0è¡¨ç¤ºä¸ºç©ºï¼Œ1è¡¨ç¤ºéç©º
 */
 int IsPQFull(PriorityQueue PQhead)
 {

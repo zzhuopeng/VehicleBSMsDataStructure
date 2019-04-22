@@ -3,7 +3,7 @@
 #include "MultiVehicleHistoryDatas.h"
 #include "VehiclePendingDatas.h"
 
-/****º¯ÊıÉùÃ÷****/
+/****å‡½æ•°å£°æ˜****/
 int Welcome(void);
 
 int main(void)
@@ -13,10 +13,10 @@ int main(void)
 	}
 }
 
-//»¶Ó­Ò³Ãæ£º²âÊÔVHD½á¹¹
+//æ¬¢è¿é¡µé¢ï¼šæµ‹è¯•VHDç»“æ„
 int Welcome(void)
 {
-	printf("******* Welcome to the VehicleHistoryData Structure *******\n");
+	printf("******* Welcome to theå“ˆå“ˆæˆ‘æ˜¯ä¸­æ–‡ VehicleHistoryData Structure *******\n");
 	printf("1: Insert a Stack to PriorityQueue;\n");
 	printf("2: Delete a Stack from PriorityQueue;\n");
 	printf("3: Update a Stack from PriorityQueue;\n");
@@ -39,7 +39,7 @@ int Welcome(void)
 	scanf("%d",&ch);
 	switch(ch) {
 		case 1: {
-			
+
 			break;
 		}
 		case 2: {
@@ -76,12 +76,12 @@ int Welcome(void)
 		}
 
 		case 0: {
-			printf("\nÍË³öÏµÍ³");
+			printf("\né€€å‡ºç³»ç»Ÿ");
 			exit(EXIT_SUCCESS);
 			break;
 		}
 		default : {
-			printf("\n¸ÃÑ¡ÔñÓĞÎó£¬ÇëÖØĞÂÑ¡Ôñ");
+			printf("\nè¯¥é€‰æ‹©æœ‰è¯¯ï¼Œè¯·é‡æ–°é€‰æ‹©");
 			break;
 		}
 	}

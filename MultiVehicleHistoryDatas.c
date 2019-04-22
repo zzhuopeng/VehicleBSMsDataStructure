@@ -1,9 +1,13 @@
 #include "MultiVehicleHistoryDatas.h"
 
+/**é™æ€å‡½æ•°å£°æ˜**/
+static int NextPrime(int N);
+static Index Hash(int key, int HashMapSize);
+
 /**
-@ brief  ³õÊ¼»¯HashMap
-@ param	 size HashMapÍ°Êı×é´óĞ¡
-@ return ³õÊ¼»¯ºóµÄHashMap
+@ brief  åˆå§‹åŒ–HashMap
+@ param	 size HashMapæ¡¶æ•°ç»„å¤§å°
+@ return åˆå§‹åŒ–åçš„HashMap
 */
 HashMap HashMapInitialize(int size)
 {
@@ -18,20 +22,20 @@ HashMap HashMapInitialize(int size)
 		printf("HashMapInitialize: HashMap size is too large\n");
 		return NULL;
 	}
-	//HashMap·ÖÅä¿Õ¼ä
+	//HashMapåˆ†é…ç©ºé—´
 	H = calloc(1, sizeof(tHashMapStruct));
 	if(NULL == H) {
 		printf("HashMapInitialize: calloc for H failed\n");
 		return NULL;
 	}
 	H->MapSize = NextPrime(size);
-	//Êı×é·ÖÅä¿Õ¼ä
+	//æ•°ç»„åˆ†é…ç©ºé—´
 	H->bucket = calloc(H->MapSize, sizeof(EntryList));
 	if(NULL == H->bucket) {
 		printf("HashMapInitialize: calloc for H->bucket failed\n");
 		return NULL;
 	}
-	//Á´±í·ÖÅä¿Õ¼ä
+	//é“¾è¡¨åˆ†é…ç©ºé—´
 	for(i=0; i<H->MapSize; i++) {
 		H->bucket[i] = calloc(1, sizeof(tListNode));
 		if(NULL == H->bucket[i]) {
@@ -44,9 +48,9 @@ HashMap HashMapInitialize(int size)
 }
 
 /**
-@ brief  »ñÈ¡>N>10µÄ×îĞ¡ËØÊı£¨staticº¯Êı£©
-@ param	 N ËØÊıÏÂ½ç
-@ return ËùÇóËØÊı
+@ brief  è·å–>N>10çš„æœ€å°ç´ æ•°ï¼ˆstaticå‡½æ•°ï¼‰
+@ param	 N ç´ æ•°ä¸‹ç•Œ
+@ return æ‰€æ±‚ç´ æ•°
 */
 static int NextPrime(int N)
 {
@@ -59,15 +63,15 @@ static int NextPrime(int N)
 			if( N % i == 0 )
 				goto ContOuter;
 		return N;
-ContOuter:
+        ContOuter:
 		;
 	}
 }
 
 /**
-@ brief  Ïú»ÙHashMap
-@ param	 H ĞèÒªÏú»ÙµÄHashMap
-@ return 0±íÊ¾Îª¿Õ£¬1±íÊ¾·Ç¿Õ
+@ brief  é”€æ¯HashMap
+@ param	 H éœ€è¦é”€æ¯çš„HashMap
+@ return 0è¡¨ç¤ºä¸ºç©ºï¼Œ1è¡¨ç¤ºéç©º
 */
 int HashMapDestroy(HashMap H)
 {
@@ -79,11 +83,11 @@ int HashMapDestroy(HashMap H)
 	}
 	for(i=0; i<H->MapSize; i++) {
 		EntryList E = H->bucket[i];
-		ListNode* tmp;
+		tListNode* tmp;
 
 		while(NULL != E) {
 			tmp = E->Next;
-			//¼ÇµÃ°ÑStackµÄ¿Õ¼äÒ²ÒªÊÍ·ÅÁË
+			//è®°å¾—æŠŠStackçš„ç©ºé—´ä¹Ÿè¦é‡Šæ”¾äº†
 			DestroyStack(E->singleVHDs);
 			free(E);
 			E = tmp;
@@ -97,9 +101,9 @@ int HashMapDestroy(HashMap H)
 
 
 /**
-@ brief  ²éÑ¯Key(vehiceID)¶ÔÓ¦µÄListNode(Stack)
-@ param	 vehicleID ³µÁ¾ID£»H HashMapÀúÊ·Êı¾İ£»S²éÑ¯½á¹û£¨Ë«ÖØÖ¸Õë£©
-@ return 0±íÊ¾Îª¿Õ£¬1±íÊ¾·Ç¿Õ
+@ brief  æŸ¥è¯¢Key(vehiceID)å¯¹åº”çš„ListNode(Stack)
+@ param	 vehicleID è½¦è¾†IDï¼›H HashMapå†å²æ•°æ®ï¼›SæŸ¥è¯¢ç»“æœï¼ˆåŒé‡æŒ‡é’ˆï¼‰
+@ return 0è¡¨ç¤ºä¸ºç©ºï¼Œ1è¡¨ç¤ºéç©º
 */
 int HashMapFind(int vehicleID, HashMap H, Stack* S)
 {
@@ -110,32 +114,31 @@ int HashMapFind(int vehicleID, HashMap H, Stack* S)
 		printf("HashMapFind: need to create HashMap first\n");
 		return 0;
 	}
-	//ÕÒµ½¶ÔÓ¦µÄList
+	//æ‰¾åˆ°å¯¹åº”çš„List
 	E = H->bucket[Hash(vehicleID, H->MapSize)];
-	//È¡³öListµÄÊ×½Úµã
+	//å–å‡ºListçš„é¦–èŠ‚ç‚¹
 	ListHead = E->Next;
-	//ÕÒ¶ÔvehicleID¶ÔÓ¦µÄListNode(Stack)-----------------tmp->singleVHDs->bsm StackÍ·ÓĞÃ»ÓĞbsm????------
-	while(NULL != ListHead && ListHead->singleVHDs->bsm->vehicleID != vehicleID) {
+	//æ‰¾å¯¹vehicleIDå¯¹åº”çš„ListNode(Stack)-----------------tmp->singleVHDs->bsm Stackå¤´æœ‰æ²¡æœ‰bsm????------
+	while(NULL != ListHead && ListHead->singleVHDs->bsm.vehicleID != vehicleID) {
 		ListHead = ListHead->Next;
 	}
-	//Ã»ÕÒµ½¶ÔÓ¦µÄStack
+	//æ²¡æ‰¾åˆ°å¯¹åº”çš„Stack
 	if(NULL == ListHead) {
 		return 0;
 	}
-	//ÕÒµ½µÄ»°¾Í¸³Öµ-------£¨ÕâÀïSÎªË«ÖØNodeÖ¸Õë£¬Ê¹ÓÃÊ±×¢Òâ£©------
+	//æ‰¾åˆ°çš„è¯å°±èµ‹å€¼-------ï¼ˆè¿™é‡ŒSä¸ºåŒé‡NodeæŒ‡é’ˆï¼Œä½¿ç”¨æ—¶æ³¨æ„ï¼‰------
 	*S = ListHead->singleVHDs;
 	return 1;
 }
 
 
 /**
-@ brief  ²åÈëÀúÊ·BSMÏûÏ¢
-@ param	 bsm Òª²åÈëµÄbsmÏûÏ¢£»H HashMapÀúÊ·Êı¾İ
-@ return 0±íÊ¾Îª¿Õ£¬1±íÊ¾·Ç¿Õ
+@ brief  æ’å…¥å†å²BSMæ¶ˆæ¯
+@ param	 bsm è¦æ’å…¥çš„bsmæ¶ˆæ¯ï¼›H HashMapå†å²æ•°æ®
+@ return 0è¡¨ç¤ºä¸ºç©ºï¼Œ1è¡¨ç¤ºéç©º
 */
 int HashMapInsert(tBSM bsm, HashMap H)
 {
-	int i;
 	EntryList E;
 	tListNode* tmp;
 
@@ -143,51 +146,51 @@ int HashMapInsert(tBSM bsm, HashMap H)
 		printf("HashMapInsert: need to create HashMap first\n");
 		return 0;
 	}
-	E = H->bucket[Hash(bsm->vehicleID, H->MapSize)];
-	if(NULL == E) {	//¸ÃÁ´±íÎª¿Õ£¬Ö±½Ó²åÈë
-		//ĞÂ½¨Ò»¸öÁ´±í½ÚµãtListNode
+	E = H->bucket[Hash(bsm.vehicleID, H->MapSize)];
+	if(NULL == E) {	//è¯¥é“¾è¡¨ä¸ºç©ºï¼Œç›´æ¥æ’å…¥
+		//æ–°å»ºä¸€ä¸ªé“¾è¡¨èŠ‚ç‚¹tListNode
 		tmp = calloc(1, sizeof(tListNode));
 		if(NULL == tmp) {
 			printf("HashMapInsert: calloc for tListNode* tmp failed\n");
 			return 0;
 		}
-		//ÎªĞÂµÄtListNodeĞÂ½¨Ò»¸öStack£¬²¢²åÈëbsmÊı¾İ
+		//ä¸ºæ–°çš„tListNodeæ–°å»ºä¸€ä¸ªStackï¼Œå¹¶æ’å…¥bsmæ•°æ®
 		tmp->singleVHDs = CreateStack();
 		if(0 == StackPush(tmp->singleVHDs, bsm)) {
 			printf("HashMapInsert: StackPush() for newStack failed\n");
 			return 0;
 		}
 		tmp->Next = NULL;
-		//½«ĞÂtListNode²åÈë¸ÃÁ´±í
+		//å°†æ–°tListNodeæ’å…¥è¯¥é“¾è¡¨
 		E->Next = tmp;
 		return 1;
-	} else {		//¸ÃÁ´±í²»Îª¿Õ
-		//±éÀú¸ÃÁ´±í£¬ÕÒ¾ßÓĞÏàÍ¬VehicleIDµÄStack,ÏÈÈ¡³öListµÄÊ×½Úµã
+	} else {		//è¯¥é“¾è¡¨ä¸ä¸ºç©º
+		//éå†è¯¥é“¾è¡¨ï¼Œæ‰¾å…·æœ‰ç›¸åŒVehicleIDçš„Stack,å…ˆå–å‡ºListçš„é¦–èŠ‚ç‚¹
 		tmp = E->Next;
-		//ÕÒ¶ÔvehicleID¶ÔÓ¦µÄListNode(Stack)-----------------tmp->singleVHDs->bsm StackÍ·ÓĞÃ»ÓĞbsm????------
-		while(NULL != tmp && tmp->singleVHDs->bsm->vehicleID!=bsm->vehicleID) {
+		//æ‰¾å¯¹vehicleIDå¯¹åº”çš„ListNode(Stack)-----------------tmp->singleVHDs->bsm Stackå¤´æœ‰æ²¡æœ‰bsm????------
+		while(NULL != tmp && tmp->singleVHDs->bsm.vehicleID!=bsm.vehicleID) {
 			tmp = tmp->Next;
 		}
-		//Ã»ÕÒµ½¶ÔÓ¦µÄStack£¬Ó¦¸Ã´´½¨Ò»¸öStackÔÙ²åÈëÁ´±í£¨±íÍ·²åÈë£©ÖĞ
+		//æ²¡æ‰¾åˆ°å¯¹åº”çš„Stackï¼Œåº”è¯¥åˆ›å»ºä¸€ä¸ªStackå†æ’å…¥é“¾è¡¨ï¼ˆè¡¨å¤´æ’å…¥ï¼‰ä¸­
 		if(NULL == tmp) {
-			//ĞÂ½¨Ò»¸öÁ´±í½ÚµãtListNode
+			//æ–°å»ºä¸€ä¸ªé“¾è¡¨èŠ‚ç‚¹tListNode
 			tmp = calloc(1, sizeof(tListNode));
 			if(NULL == tmp) {
 				printf("HashMapInsert: calloc for tListNode* tmp failed\n");
 				return 0;
 			}
-			//ÎªĞÂµÄtListNodeĞÂ½¨Ò»¸öStack£¬²¢²åÈëbsmÊı¾İ
+			//ä¸ºæ–°çš„tListNodeæ–°å»ºä¸€ä¸ªStackï¼Œå¹¶æ’å…¥bsmæ•°æ®
 			tmp->singleVHDs = CreateStack();
 			if(0 == StackPush(tmp->singleVHDs, bsm)) {
 				printf("HashMapInsert: StackPush() for newStack failed\n");
 				return 0;
 			}
-			//½«ĞÂtListNode²åÈë¸ÃÁ´±í
+			//å°†æ–°tListNodeæ’å…¥è¯¥é“¾è¡¨
 			tmp->Next = E->Next;
 			E->Next = tmp;
 			return 1;
 		}
-		//ÕÒµ½¾ÍÍùStackÖĞ²åÈëbsm
+		//æ‰¾åˆ°å°±å¾€Stackä¸­æ’å…¥bsm
 		if(0 == StackPush(tmp->singleVHDs, bsm)) {
 			printf("HashMapInsert: StackPush() for newStack failed\n");
 			return 0;
@@ -197,9 +200,9 @@ int HashMapInsert(tBSM bsm, HashMap H)
 }
 
 /**
-@ brief  HashMap¶¯Ì¬À©Èİ
-@ param	 H ĞèÒªÀ©ÈİµÄHashMap
-@ return À©ÈİºóµÄHashMap
+@ brief  HashMapåŠ¨æ€æ‰©å®¹
+@ param	 H éœ€è¦æ‰©å®¹çš„HashMap
+@ return æ‰©å®¹åçš„HashMap
 */
 //HashMap HashMapReHash(HashMap H)
 //{
@@ -207,13 +210,13 @@ int HashMapInsert(tBSM bsm, HashMap H)
 //}
 
 /**
-@ brief  Hashº¯Êı£¬½«Key×ª»»ÎªIndex£¨staticº¯Êı£©
-@ param	 key ¼ü£»HashMapSize HashMapÖĞbucketÊı×é´óĞ¡
-@ return key¶ÔÓ¦µÄÊı×éÏÂ±ê
+@ brief  Hashå‡½æ•°ï¼Œå°†Keyè½¬æ¢ä¸ºIndexï¼ˆstaticå‡½æ•°ï¼‰
+@ param	 key é”®ï¼›HashMapSize HashMapä¸­bucketæ•°ç»„å¤§å°
+@ return keyå¯¹åº”çš„æ•°ç»„ä¸‹æ ‡
 */
 static Index Hash(int key, int HashMapSize)
 {
-	return Key % HashMapSize;
+	return key % HashMapSize;
 }
 
 

@@ -1,20 +1,20 @@
 #ifndef _BSM_H_
 #define _BSM_H_
 
-/* ÓÃÓÚÄ£ÄâBSMÏûÏ¢ */
+/* ç”¨äºæ¨¡æ‹ŸBSMæ¶ˆæ¯ */
 
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
 
 
-//BSMÏûÏ¢
+//BSMæ¶ˆæ¯
 typedef struct BSM {
 	int id; 			//id
-	int vehicleID; 		//³µÁ¾ID
-	double latitude;	//³µÁ¾Î³¶È
-	double longitude;	//³µÁ¾¾­¶È
-	long vehicleClass;	//³µÁ¾×´Ì¬£¨·ÖÀà£©
+	int vehicleID; 		//è½¦è¾†ID
+	double latitude;	//è½¦è¾†çº¬åº¦
+	double longitude;	//è½¦è¾†ç»åº¦
+	long vehicleClass;	//è½¦è¾†çŠ¶æ€ï¼ˆåˆ†ç±»ï¼‰
 } tBSM;
 
 #endif

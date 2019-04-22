@@ -2,40 +2,40 @@
 #define _VehicleHistoryDatas_H_
 
 /**
- * ËµÃ÷£ºµ¥¸ö³µÁ¾ÀúÊ·Êı¾İVHDs(Vehicle History Datas)Í¨¹ıStack´æ´¢£¬
-		 ¶à³µÀúÊ·Êı¾İMVHDs(Multi-Vehicle History Datas)Í¨¹ıHashMap´æ´¢¡£
- * ×¢Òâ£ºStackÊµ¼ÊÉÏÎªNode*£¬ÓÃStack±íÊ¾Õ»¡£ 
-		ÕâÀï±íÍ·Stack S²»°üº¬ÈÎºÎÊı¾İ£¬ÎªÑÆ½Úµã£¬ 
-		·ñÔò£¬ÔÚpushÊ±(Ê×½Úµã)ĞèÒª¿¼ÂÇË«ÖØÖ¸ÕëÎÊÌâ
+ * è¯´æ˜ï¼šå•ä¸ªè½¦è¾†å†å²æ•°æ®VHDs(Vehicle History Datas)é€šè¿‡Stackå­˜å‚¨ï¼Œ
+		 å¤šè½¦å†å²æ•°æ®MVHDs(Multi-Vehicle History Datas)é€šè¿‡HashMapå­˜å‚¨ã€‚
+ * æ³¨æ„ï¼šStackå®é™…ä¸Šä¸ºNode*ï¼Œç”¨Stackè¡¨ç¤ºæ ˆã€‚ 
+		è¿™é‡Œè¡¨å¤´Stack Sä¸åŒ…å«ä»»ä½•æ•°æ®ï¼Œä¸ºå“‘èŠ‚ç‚¹ï¼Œ 
+		å¦åˆ™ï¼Œåœ¨pushæ—¶(é¦–èŠ‚ç‚¹)éœ€è¦è€ƒè™‘åŒé‡æŒ‡é’ˆé—®
  */
 
 #include "BSM.h"
 
 
-/****ºê¶¨Òå****/
-#define STACK_CAPACITY 	4	//µ¥¸öVehicleÀúÊ·BSMÊı¾İ¸öÊı 
+/****å®å®šä¹‰****/
+#define STACK_CAPACITY 	4	//å•ä¸ªVehicleå†å²BSMæ•°æ®ä¸ªæ•° 
 
-/****½á¹¹Ìå¶¨Òå****/
+/****ç»“æ„ä½“å®šä¹‰****/
 typedef struct Node* Stack;
 
 typedef struct Node {
-	tBSM bsm; 			//BSMÏûÏ¢
-	int StackSize;		//Stack´óĞ¡
+	tBSM bsm; 			//BSMæ¶ˆæ¯
+	int StackSize;		//Stackå¤§å°
 	struct Node* Next;
 } tNode;
 
 
-/****Õ»Ïà¹Ø²Ù×÷£¨µ¥Á´±í£©****/
-int IsStackEmpty(Stack S); 							//ÅĞ¶ÏÊÇ·ñÎª¿Õ
-Stack CreateStack(void);							//´´½¨Ò»¸ö¿ÕÕ»
-int ClearStack(Stack S);							//Çå³ıÕ»ËùÓĞÔªËØ
-int DestroyStack(Stack S);							//Ïú»ÙÕ» 
-int Top(Stack S, tBSM* topBSM);						//»ñÈ¡StackÖĞÕ»¶¥ÔªËØ
-int Pop(Stack S); 		    						//³öÕ»(´ÓÕ»¶¥µ¯³öÔªËØ,Çå³ıÕ»¶¥ÔªËØ)
-int StackQuery(Stack S, int index, tBSM* indexBSM);	//»ñÈ¡StackÖĞÏÂ±êÎªindexÔªËØ
-int StackIterator(Stack S, tBSM* BSMs); 			//Stack±éÀúÆ÷
-int StackPush(Stack S, tBSM bsm); 					//ÈëÕ»£¨ĞèÒªÅĞ¶ÏÈİÁ¿´óĞ¡£¬³¬¹ıÔòĞèÒª°ÑÕ»µ×ÔªËØÈ¥µô£©
-int ClearBottom(Stack S);							//µ×²¿³öÕ»
+/****æ ˆç›¸å…³æ“ä½œï¼ˆå•é“¾è¡¨ï¼‰****/
+int IsStackEmpty(Stack S); 							//åˆ¤æ–­æ˜¯å¦ä¸ºç©º
+Stack CreateStack(void);							//åˆ›å»ºä¸€ä¸ªç©ºæ ˆ
+int ClearStack(Stack S);							//æ¸…é™¤æ ˆæ‰€æœ‰å…ƒç´ 
+int DestroyStack(Stack S);							//é”€æ¯æ ˆ 
+int Top(Stack S, tBSM* topBSM);						//è·å–Stackä¸­æ ˆé¡¶å…ƒç´ 
+int Pop(Stack S); 		    						//å‡ºæ ˆ(ä»æ ˆé¡¶å¼¹å‡ºå…ƒç´ ,æ¸…é™¤æ ˆé¡¶å…ƒç´ )
+int StackQuery(Stack S, int index, tBSM* indexBSM);	//è·å–Stackä¸­ä¸‹æ ‡ä¸ºindexå…ƒç´ 
+int StackIterator(Stack S, tBSM* BSMs); 			//Stackéå†å™¨
+int StackPush(Stack S, tBSM bsm); 					//å…¥æ ˆï¼ˆéœ€è¦åˆ¤æ–­å®¹é‡å¤§å°ï¼Œè¶…è¿‡åˆ™éœ€è¦æŠŠæ ˆåº•å…ƒç´ å»æ‰ï¼‰
+int ClearBottom(Stack S);							//åº•éƒ¨å‡ºæ ˆ
 
 
 #endif

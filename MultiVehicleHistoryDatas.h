@@ -2,44 +2,44 @@
 #define _MultiVehicleHistoryDatas_H_
 
 /**
- * ËµÃ÷£º¶à³µÀúÊ·Êı¾İMVHDs(Multi-Vehicle History Datas)Í¨¹ıHashMap´æ´¢¡£
- 		µ¥¸ö³µÁ¾ÀúÊ·Êı¾İVHDs(Vehicle History Datas)Í¨¹ıStack´æ´¢¡£
- * ×¢Òâ£ºEntryListµÄ±íÍ·ÎªÑÆ½Úµã£¬²»´æ·ÅÊµ¼ÊÊı¾İ¡£
+ * è¯´æ˜ï¼šå¤šè½¦å†å²æ•°æ®MVHDs(Multi-Vehicle History Datas)é€šè¿‡HashMapå­˜å‚¨ã€‚
+ 		å•ä¸ªè½¦è¾†å†å²æ•°æ®VHDs(Vehicle History Datas)é€šè¿‡Stackå­˜å‚¨ã€‚
+ * æ³¨æ„ï¼šEntryListçš„è¡¨å¤´ä¸ºå“‘èŠ‚ç‚¹ï¼Œä¸å­˜æ”¾å®é™…æ•°æ®ã€‚
  */
 
 #include "VehicleHistoryDatas.h"
 
 
-/****ºê¶¨Òå****/
-#define HASHMAP_BUCKET_MIN_CAPACITY 	16	//Í°Êı×é×îĞ¡ÈİÁ¿
-#define HASHMAP_BUCKET_MAX_CAPACITY 	64	//Í°Êı×é×î´óÈİÁ¿
-#define ENTRYLIST_CAPACITY 				12	//Á´±í×î´ó³¤¶È
+/****å®å®šä¹‰****/
+#define HASHMAP_BUCKET_MIN_CAPACITY 	16	//æ¡¶æ•°ç»„æœ€å°å®¹é‡
+#define HASHMAP_BUCKET_MAX_CAPACITY 	64	//æ¡¶æ•°ç»„æœ€å¤§å®¹é‡
+#define ENTRYLIST_CAPACITY 				12	//é“¾è¡¨æœ€å¤§é•¿åº¦
 
 
 
-/****½á¹¹Ìå¶¨Òå****/
-typedef unsigned int Index;				//Êı×éÏÂ±ê
-typedef struct ListNode* EntryList;		//Í°Èë¿ÚµÄÁ´±í£¨ÆğÕâ¸öÃû×Ö²»ÈİÒ×ÖØÃû£©
+/****ç»“æ„ä½“å®šä¹‰****/
+typedef unsigned int Index;				//æ•°ç»„ä¸‹æ ‡
+typedef struct ListNode* EntryList;		//æ¡¶å…¥å£çš„é“¾è¡¨ï¼ˆèµ·è¿™ä¸ªåå­—ä¸å®¹æ˜“é‡åï¼‰
 typedef struct HashMapStruct* HashMap;
 
-//ListNode´ú±íÁËÒ»¸öStack
+//ListNodeä»£è¡¨äº†ä¸€ä¸ªStack
 typedef struct ListNode {
 	Stack singleVHDs;
 	struct ListNode*  Next;
 } tListNode;
 
-//Í°Êı×ébucketÖ÷ÒªÊµÏÖÁËHashMapµÄÖ÷¸É
+//æ¡¶æ•°ç»„bucketä¸»è¦å®ç°äº†HashMapçš„ä¸»å¹²
 typedef struct HashMapStruct {
 	int MapSize;
-	EntryList* bucket;	//Í°Êı×é
+	EntryList* bucket;	//æ¡¶æ•°ç»„
 } tHashMapStruct;
 
 
-/****HashMapÏà¹Ø²Ù×÷****/
-HashMap HashMapInitialize(int size);						//³õÊ¼»¯HashMap
-int HashMapDestroy(HashMap H);								//Ïú»ÙHashMap
-int HashMapFind(int vehicleID, HashMap H, Stack* stack);		//²éÑ¯Key(vehiceID)¶ÔÓ¦µÄStack
-int HashMapInsert(tBSM bsm, HashMap H);						//²åÈëÀúÊ·BSMÏûÏ¢ 
-//HashMap HashMapReHash(HashMap H);							//HashMap¶¯Ì¬À©Èİ
+/****HashMapç›¸å…³æ“ä½œ****/
+HashMap HashMapInitialize(int size);						//åˆå§‹åŒ–HashMap
+int HashMapDestroy(HashMap H);								//é”€æ¯HashMap
+int HashMapFind(int vehicleID, HashMap H, Stack* stack);		//æŸ¥è¯¢Key(vehiceID)å¯¹åº”çš„Stack
+int HashMapInsert(tBSM bsm, HashMap H);						//æ’å…¥å†å²BSMæ¶ˆæ¯ 
+//HashMap HashMapReHash(HashMap H);							//HashMapåŠ¨æ€æ‰©å®¹
 
 #endif
