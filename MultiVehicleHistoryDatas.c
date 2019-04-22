@@ -11,40 +11,40 @@ static Index Hash(int key, int HashMapSize);
 */
 HashMap HashMapInitialize(int size)
 {
-	HashMap H;
-	int i;
+    HashMap H;
+    int i;
 
-	if(size < HASHMAP_BUCKET_MIN_CAPACITY) {
-		printf("HashMapInitialize: HashMap size is too small\n");
-		return NULL;
-	}
-	if(size > HASHMAP_BUCKET_MAX_CAPACITY) {
-		printf("HashMapInitialize: HashMap size is too large\n");
-		return NULL;
-	}
-	//HashMap分配空间
-	H = calloc(1, sizeof(tHashMapStruct));
-	if(NULL == H) {
-		printf("HashMapInitialize: calloc for H failed\n");
-		return NULL;
-	}
-	H->MapSize = NextPrime(size);
-	//数组分配空间
-	H->bucket = calloc(H->MapSize, sizeof(EntryList));
-	if(NULL == H->bucket) {
-		printf("HashMapInitialize: calloc for H->bucket failed\n");
-		return NULL;
-	}
-	//链表分配空间
-	for(i=0; i<H->MapSize; i++) {
-		H->bucket[i] = calloc(1, sizeof(tListNode));
-		if(NULL == H->bucket[i]) {
-			printf("HashMapInitialize: calloc for H->bucket[i] failed\n");
-			return NULL;
-		}
-		H->bucket[i]->Next = NULL;
-	}
-	return H;
+    if(size < HASHMAP_BUCKET_MIN_CAPACITY) {
+        printf("HashMapInitialize: HashMap size is too small\n");
+        return NULL;
+    }
+    if(size > HASHMAP_BUCKET_MAX_CAPACITY) {
+        printf("HashMapInitialize: HashMap size is too large\n");
+        return NULL;
+    }
+    //HashMap分配空间
+    H = calloc(1, sizeof(tHashMapStruct));
+    if(NULL == H) {
+        printf("HashMapInitialize: calloc for H failed\n");
+        return NULL;
+    }
+    H->MapSize = NextPrime(size);
+    //数组分配空间
+    H->bucket = calloc(H->MapSize, sizeof(EntryList));
+    if(NULL == H->bucket) {
+        printf("HashMapInitialize: calloc for H->bucket failed\n");
+        return NULL;
+    }
+    //链表分配空间
+    for(i=0; i<H->MapSize; i++) {
+        H->bucket[i] = calloc(1, sizeof(tListNode));
+        if(NULL == H->bucket[i]) {
+            printf("HashMapInitialize: calloc for H->bucket[i] failed\n");
+            return NULL;
+        }
+        H->bucket[i]->Next = NULL;
+    }
+    return H;
 }
 
 /**
@@ -54,18 +54,18 @@ HashMap HashMapInitialize(int size)
 */
 static int NextPrime(int N)
 {
-	int i;
+    int i;
 
-	if( N % 2 == 0 )
-		N++;
-	for( ; ; N += 2 ) {
-		for( i = 3; i * i <= N; i += 2 )
-			if( N % i == 0 )
-				goto ContOuter;
-		return N;
-        ContOuter:
-		;
-	}
+    if( N % 2 == 0 )
+        N++;
+    for( ; ; N += 2 ) {
+        for( i = 3; i * i <= N; i += 2 )
+            if( N % i == 0 )
+                goto ContOuter;
+        return N;
+    ContOuter:
+        ;
+    }
 }
 
 /**
@@ -75,28 +75,28 @@ static int NextPrime(int N)
 */
 int HashMapDestroy(HashMap H)
 {
-	int i;
+    int i;
 
-	if(NULL == H) {
-		printf("HashMapDestroy: need to create HashMap first\n");
-		return 0;
-	}
-	for(i=0; i<H->MapSize; i++) {
-		EntryList E = H->bucket[i];
-		tListNode* tmp;
+    if(NULL == H) {
+        printf("HashMapDestroy: need to create HashMap first\n");
+        return 0;
+    }
+    for(i=0; i<H->MapSize; i++) {
+        EntryList E = H->bucket[i];
+        tListNode* tmp;
 
-		while(NULL != E) {
-			tmp = E->Next;
-			//记得把Stack的空间也要释放了
-			DestroyStack(E->singleVHDs);
-			free(E);
-			E = tmp;
-		}
-	}
+        while(NULL != E) {
+            tmp = E->Next;
+            //记得把Stack的空间也要释放了
+            DestroyStack(E->singleVHDs);
+            free(E);
+            E = tmp;
+        }
+    }
 
-	free(H->bucket);
-	free(H);
-	return 1;
+    free(H->bucket);
+    free(H);
+    return 1;
 }
 
 
@@ -107,28 +107,28 @@ int HashMapDestroy(HashMap H)
 */
 int HashMapFind(int vehicleID, HashMap H, Stack* S)
 {
-	EntryList E;
-	tListNode* ListHead;
+    EntryList E;
+    tListNode* ListHead;
 
-	if(NULL == H) {
-		printf("HashMapFind: need to create HashMap first\n");
-		return 0;
-	}
-	//找到对应的List
-	E = H->bucket[Hash(vehicleID, H->MapSize)];
-	//取出List的首节点
-	ListHead = E->Next;
-	//找对vehicleID对应的ListNode(Stack)-----------------tmp->singleVHDs->bsm Stack头有没有bsm????------
-	while(NULL != ListHead && ListHead->singleVHDs->bsm.vehicleID != vehicleID) {
-		ListHead = ListHead->Next;
-	}
-	//没找到对应的Stack
-	if(NULL == ListHead) {
-		return 0;
-	}
-	//找到的话就赋值-------（这里S为双重Node指针，使用时注意）------
-	*S = ListHead->singleVHDs;
-	return 1;
+    if(NULL == H) {
+        printf("HashMapFind: need to create HashMap first\n");
+        return 0;
+    }
+    //找到对应的List
+    E = H->bucket[Hash(vehicleID, H->MapSize)];
+    //取出List的首节点
+    ListHead = E->Next;
+    //找对vehicleID对应的ListNode(Stack)
+    while(NULL != ListHead && ListHead->singleVHDs->Next->bsm.vehicleID != vehicleID) {
+        ListHead = ListHead->Next;
+    }
+    //没找到对应的Stack
+    if(NULL == ListHead) {
+        return 0;
+    }
+    //找到的话就赋值-------（这里S为双重Node指针，使用时注意）------
+    *S = ListHead->singleVHDs;
+    return 1;
 }
 
 
@@ -139,64 +139,47 @@ int HashMapFind(int vehicleID, HashMap H, Stack* S)
 */
 int HashMapInsert(tBSM bsm, HashMap H)
 {
-	EntryList E;
-	tListNode* tmp;
+    EntryList E;
+    tListNode* tmp;
 
-	if(NULL == H) {
-		printf("HashMapInsert: need to create HashMap first\n");
-		return 0;
-	}
-	E = H->bucket[Hash(bsm.vehicleID, H->MapSize)];
-	if(NULL == E) {	//该链表为空，直接插入
-		//新建一个链表节点tListNode
-		tmp = calloc(1, sizeof(tListNode));
-		if(NULL == tmp) {
-			printf("HashMapInsert: calloc for tListNode* tmp failed\n");
-			return 0;
-		}
-		//为新的tListNode新建一个Stack，并插入bsm数据
-		tmp->singleVHDs = CreateStack();
-		if(0 == StackPush(tmp->singleVHDs, bsm)) {
-			printf("HashMapInsert: StackPush() for newStack failed\n");
-			return 0;
-		}
-		tmp->Next = NULL;
-		//将新tListNode插入该链表
-		E->Next = tmp;
-		return 1;
-	} else {		//该链表不为空
-		//遍历该链表，找具有相同VehicleID的Stack,先取出List的首节点
-		tmp = E->Next;
-		//找对vehicleID对应的ListNode(Stack)-----------------tmp->singleVHDs->bsm Stack头有没有bsm????------
-		while(NULL != tmp && tmp->singleVHDs->bsm.vehicleID!=bsm.vehicleID) {
-			tmp = tmp->Next;
-		}
-		//没找到对应的Stack，应该创建一个Stack再插入链表（表头插入）中
-		if(NULL == tmp) {
-			//新建一个链表节点tListNode
-			tmp = calloc(1, sizeof(tListNode));
-			if(NULL == tmp) {
-				printf("HashMapInsert: calloc for tListNode* tmp failed\n");
-				return 0;
-			}
-			//为新的tListNode新建一个Stack，并插入bsm数据
-			tmp->singleVHDs = CreateStack();
-			if(0 == StackPush(tmp->singleVHDs, bsm)) {
-				printf("HashMapInsert: StackPush() for newStack failed\n");
-				return 0;
-			}
-			//将新tListNode插入该链表
-			tmp->Next = E->Next;
-			E->Next = tmp;
-			return 1;
-		}
-		//找到就往Stack中插入bsm
-		if(0 == StackPush(tmp->singleVHDs, bsm)) {
-			printf("HashMapInsert: StackPush() for newStack failed\n");
-			return 0;
-		}
-		return 1;
-	}
+    if(NULL == H) {
+        printf("HashMapInsert: need to create HashMap first\n");
+        return 0;
+    }
+    E = H->bucket[Hash(bsm.vehicleID, H->MapSize)];
+
+    //遍历该链表，找具有相同VehicleID的Stack,先取出List的首节点
+    tmp = E->Next;
+    //找对vehicleID对应的ListNode(Stack)
+    while(NULL != tmp && tmp->singleVHDs->Next->bsm.vehicleID!=bsm.vehicleID) {
+        tmp = tmp->Next;
+    }
+    //没找到对应的Stack，应该创建一个Stack再插入链表（表头插入）中
+    if(NULL == tmp) {
+        //新建一个链表节点tListNode
+        tmp = calloc(1, sizeof(tListNode));
+        if(NULL == tmp) {
+            printf("HashMapInsert: calloc for tListNode* tmp failed\n");
+            return 0;
+        }
+        //为新的tListNode新建一个Stack，并插入bsm数据
+        tmp->singleVHDs = CreateStack();
+        if(0 == StackPush(tmp->singleVHDs, bsm)) {
+            printf("HashMapInsert: StackPush() for newStack failed\n");
+            return 0;
+        }
+        //将新tListNode插入该链表
+        tmp->Next = E->Next;
+        E->Next = tmp;
+        return 1;
+    }
+    //找到就往Stack中插入bsm
+    if(0 == StackPush(tmp->singleVHDs, bsm)) {
+        printf("HashMapInsert: StackPush() for newStack failed\n");
+        return 0;
+    }
+    return 1;
+}
 }
 
 /**
@@ -216,7 +199,7 @@ int HashMapInsert(tBSM bsm, HashMap H)
 */
 static Index Hash(int key, int HashMapSize)
 {
-	return key % HashMapSize;
+    return key % HashMapSize;
 }
 
 
