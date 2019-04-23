@@ -83,9 +83,10 @@ int PQInsertBSM(PriorityQueue PQhead, tBSM bsm)
         printf("PQInsertBSM: need to create Priority Queue first\n");
         return 0;
     }
-    //去除VehicleID重复的BSM
+    //去除VehicleID重复的BSM，并插入新的BSM
     if(0 != PQDeduplication(PQhead, bsm)) {
         printf("PQInsertBSM: PQDeduplication() failed\n");
+        return 1;
     }
 
     //达到容量，则进行删除或扩容。扩展的大小=原大小*扩容因子
@@ -135,7 +136,7 @@ int PQInsertBSM(PriorityQueue PQhead, tBSM bsm)
 }
 
 /**
-@ brief  查询数组中是否有该VehicleID的BSM（用于去重）（静态方法）
+@ brief  查询数组中是否有该VehicleID的BSM，并插入新的BSM（用于去重）（静态方法）
 @ param	 PQhead 优先级队列 队首，bsm 需要去重的BSM
 @ return 0表示失败，1表示成功
 */
@@ -152,10 +153,8 @@ static int PQDeduplication(PriorityQueue PQhead, tBSM bsm)
     while(index<=PQhead->Size && PQhead->BSMs[index].vehicleID != bsm.vehicleID) {
         index++;
     }
-    //说明没找到相同的，也即去重成功
-    if(index > PQhead->Size) {
-        return 1;
-    } else { //说明有相同VehicleID的BSM消息
+    //说明有相同VehicleID的BSM消息
+    if(index <= PQhead->Size) {
         if(PQComputeKey(PQhead->BSMs[index]) > PQComputeKey(bsm)) { //比原来的小，上滤
             //从原来index位置，上滤
             for(i=index; PQComputeKey(PQhead->BSMs[i/2])>PQComputeKey(bsm) && i<=1; i/=2) {
@@ -187,6 +186,9 @@ static int PQDeduplication(PriorityQueue PQhead, tBSM bsm)
             PQhead->BSMs[index] = bsm;
         }
         return 1;
+    } else {
+        //没找到相同的，也就没将BSM插入
+        return 0;
     }
 }
 
