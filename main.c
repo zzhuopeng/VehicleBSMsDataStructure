@@ -16,7 +16,7 @@ int main(void)
 //欢迎页面：测试VHD结构
 int Welcome(void)
 {
-    printf("******* Welcome to the哈哈我是中文 VehicleHistoryData Structure *******\n");
+    printf("******* Welcome to the VehicleHistoryData Structure *******\n");
     printf("1: Insert a Stack to PriorityQueue;\n");
     printf("2: Delete a Stack from PriorityQueue;\n");
     printf("3: Update a Stack from PriorityQueue;\n");
