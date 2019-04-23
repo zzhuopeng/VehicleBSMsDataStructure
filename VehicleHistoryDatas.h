@@ -36,7 +36,9 @@ int Pop(Stack S); 		    						//出栈(从栈顶弹出元素,清除栈顶元素)
 int StackQuery(Stack S, int index, tBSM* indexBSM);	//获取Stack中下标为index元素
 int StackIterator(Stack S, tBSM* BSMs); 			//Stack遍历器
 int StackPush(Stack S, tBSM bsm); 					//入栈（需要判断容量大小，超过则需要把栈底元素去掉）
-int ClearBottom(Stack S);							//底部出栈
+
+/**静态函数声明**/
+//static int ClearBottom(Stack S);							//底部出栈
 
 
 #endif

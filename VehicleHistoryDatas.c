@@ -1,5 +1,9 @@
 #include "VehicleHistoryDatas.h"
 
+/**静态函数声明**/
+static int ClearBottom(Stack S);
+
+
 /**************栈相关操作***************/
 
 /**
@@ -200,11 +204,11 @@ int StackPush(Stack S, tBSM bsm)
 }
 
 /**
-@ brief  底部出栈
+@ brief  底部出栈（静态函数）
 @ param	 S栈变量
 @ return 0表示失败，1表示成功
 */
-int ClearBottom(Stack S)
+static int ClearBottom(Stack S)
 {
 	if(IsStackEmpty(S)) {
 		printf("clearBottom: S is empty\n");
