@@ -3,13 +3,12 @@
 
 /**
  * 说明：车辆待处理数据VPDs(Vehicle Pending Datas)存储结构体
- 		单个车辆待处理数据通过BSM存储，车辆之间数据通过PriorityQueue存储。
+ 		单个车辆待处理数据通过BSM存储，车辆之间数据通过PriorityQueue存储，bucket[0]不包含数据。
  		排序规则：车辆状态+车辆之间距离
  * 注意：①PriorityQueue中，待处理消息不能保留太多，
  		否则每次更新HV的BSM后，都需要耗费较多时间重排序
  		 ②PriorityQueue的容量尽量不能经常被填满，否则需要经常PQDeleteMaxBSM()， 比较耗时
- 	扩展：
-	 	 ①重复的BSM消息，需要在PriorityQueue里面去除
+ 		 ③重复的BSM消息，会在PriorityQueue里面去除
  */
 
 #include <math.h>
