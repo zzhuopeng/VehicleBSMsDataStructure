@@ -88,7 +88,10 @@ int HashMapDestroy(HashMap H)
         while(NULL != E) {
             tmp = E->Next;
             //记得把Stack的空间也要释放了
-            DestroyStack(E->singleVHDs);
+            if(0 == DestroyStack(E->singleVHDs)) {
+                printf("HashMapDestroy: DestroyStack() failed\n");
+                return 0;
+            }
             free(E);
             E = tmp;
         }
@@ -145,6 +148,7 @@ int HashMapInsert(tBSM bsm, HashMap H)
 {
     EntryList E;
     tListNode* tmp;
+    int listLength;     //链表长度
 
     if(NULL == H) {
         printf("HashMapInsert: need to create HashMap first\n");
@@ -152,14 +156,25 @@ int HashMapInsert(tBSM bsm, HashMap H)
     }
     E = H->bucket[Hash(bsm.vehicleID, H->MapSize)];
 
-    //遍历该链表，找具有相同VehicleID的Stack,先取出List的首节点
-    tmp = E->Next;
+    //遍历该链表，找具有相同VehicleID的Stack（同时获取链表底部节点）
+    tmp = E;
+    listLength = 0;
     //找对vehicleID对应的ListNode(Stack)
-    while(NULL != tmp && tmp->singleVHDs->Next->bsm.vehicleID!=bsm.vehicleID) {
+    while(NULL != tmp->Next && tmp->Next->singleVHDs->Next->bsm.vehicleID!=bsm.vehicleID) {
         tmp = tmp->Next;
+        listLength++;
     }
-    //没找到对应的Stack，应该创建一个Stack再插入链表（表头插入）中
-    if(NULL == tmp) {
+    //没找到对应的Stack，且tmp指向链表底部节点
+    if(NULL == tmp->Next) {
+        //长度达到限制,删除底部ListNode，然后创建一个Stack再插入链表（表头插入）中
+        if(listLength >= ENTRYLIST_CAPACITY) {
+            if(0 == DestroyStack(tmp->singleVHDs)) {
+                printf("HashMapInsert: DestroyStack() failed\n");
+                return 0;
+            }
+            free(tmp);
+            tmp = NULL;
+        }
         //新建一个链表节点tListNode
         tmp = calloc(1, sizeof(tListNode));
         if(NULL == tmp) {
@@ -178,7 +193,7 @@ int HashMapInsert(tBSM bsm, HashMap H)
         return 1;
     }
     //找到就往Stack中插入bsm
-    if(0 == StackPush(tmp->singleVHDs, bsm)) {
+    if(0 == StackPush(tmp->Next->singleVHDs, bsm)) {
         printf("HashMapInsert: StackPush() for newStack failed\n");
         return 0;
     }

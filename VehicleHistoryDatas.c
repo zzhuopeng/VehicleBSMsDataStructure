@@ -59,8 +59,8 @@ int ClearStack(Stack S)
 */
 int DestroyStack(Stack S)
 {
-	if(0 == ClearBottom(S)) {
-		printf("DestroyStack: ClearBottom() failed\n");
+	if(0 == ClearStack(S)) {
+		printf("DestroyStack: ClearStack() failed\n");
 		return 0;
 	}
 	//销毁元素后，再销毁栈头即可
