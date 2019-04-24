@@ -117,10 +117,10 @@ int PQInsertBSM(PriorityQueue PQhead, tBSM bsm)
                     printf("PQInsertBSM: PQDeleteMaxBSM() failed\n\n");
                     return 0;
                 }
-            } else { //扩容成功
-                PQhead->BSMs = biggerBSM;
-                PQhead->Capacity = biggerCapacity;
             }
+            //扩容成功
+            PQhead->BSMs = biggerBSM;
+            PQhead->Capacity = biggerCapacity;
         }
 
         //记得释放内存

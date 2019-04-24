@@ -9,7 +9,7 @@ static int ClearBottom(Stack S);
 /**
 @ brief  判断该栈是否为空
 @ param	 S 栈变量
-@ return 0表示为空，1表示非空
+@ return 0表示非空，1表示为空
 */
 int IsStackEmpty(Stack S)
 {

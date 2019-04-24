@@ -2,52 +2,55 @@
 #define WarningMessageQueue_H_
 
 /**
- * ËµÃ÷£ºÔ¤¾¯ÏûÏ¢ÓÅÏÈ¼¶¶ÓÁĞ£¨Waring Message Priority Queue£©´æ´¢½á¹¹Ìå
- 		Í¨¹ı×î´ó¶Ñ½øĞĞ´æ´¢£¬WarningMessages[0]²»°üº¬Êı¾İ¡£
- 		ÅÅĞò¹æÔò£ºÔ¤¾¯³¡¾°+Ô¤¾¯µÈ¼¶
- * ×¢Òâ£º¢ÙPriorityQueueµÄÈİÁ¿¾¡Á¿²»ÄÜ¾­³£±»ÌîÂú£¬·ñÔòĞèÒª¾­³£PQDeleteMaxBSM()£¬ ±È½ÏºÄÊ±
-   ´ı¿¼ÂÇ£º
- 		 ¢ÚÖØ¸´µÄBSMÏûÏ¢£¬»áÔÚPriorityQueueÀïÃæÈ¥³ı£¨Õâ²¿·ÖĞèÒª¿¼ÂÇÒ»ÏÂ£©
+ * è¯´æ˜ï¼šé¢„è­¦æ¶ˆæ¯ä¼˜å…ˆçº§é˜Ÿåˆ—ï¼ˆWarning Message Priority Queueï¼‰å­˜å‚¨ç»“æ„ä½“
+ 		é€šè¿‡æœ€å¤§å †è¿›è¡Œå­˜å‚¨ï¼ŒWarningMessages[0]ä¸åŒ…å«æ•°æ®ã€‚
+ 		æ’åºè§„åˆ™ï¼šé¢„è­¦åœºæ™¯+é¢„è­¦ç­‰çº§
+ * æ³¨æ„ï¼šâ‘ PriorityQueueçš„å®¹é‡å°½é‡ä¸èƒ½ç»å¸¸è¢«å¡«æ»¡ï¼Œå¦åˆ™éœ€è¦ç»å¸¸PQDeleteMaxBSM()ï¼Œ æ¯”è¾ƒè€—æ—¶
+   å¾…è€ƒè™‘ï¼š
+ 		 â‘¡é‡å¤çš„BSMæ¶ˆæ¯ï¼Œä¼šåœ¨PriorityQueueé‡Œé¢å»é™¤ï¼ˆè¿™éƒ¨åˆ†éœ€è¦è€ƒè™‘ä¸€ä¸‹ï¼‰
  */
 
+#include <stdlib.h>
+#include <stdio.h>
 
-/****ºê¶¨Òå****/
-#define WarningPQ_MIN_CAPACITY 	8	//Ô¤¾¯ÏûÏ¢ÓÅÏÈ¼¶¶ÓÁĞ£¨¶ÑÈİÁ¿£©×îĞ¡±£Áô¸öÊı
-#define WarningPQ_MAX_CAPACITY 	64	//Ô¤¾¯ÏûÏ¢ÓÅÏÈ¼¶¶ÓÁĞ£¨¶ÑÈİÁ¿£©×î´ó±£Áô¸öÊı
-#define WarningPQ_EXPENDFACTOR	0.5 //À©ÈİÒò×Ó£¬À©Õ¹µÄ´óĞ¡=Ô­´óĞ¡*À©ÈİÒò×Ó
+/****å®å®šä¹‰****/
+#define WarningPQ_MIN_CAPACITY 	8	//é¢„è­¦æ¶ˆæ¯ä¼˜å…ˆçº§é˜Ÿåˆ—ï¼ˆå †å®¹é‡ï¼‰æœ€å°ä¿ç•™ä¸ªæ•°
+#define WarningPQ_MAX_CAPACITY 	64	//é¢„è­¦æ¶ˆæ¯ä¼˜å…ˆçº§é˜Ÿåˆ—ï¼ˆå †å®¹é‡ï¼‰æœ€å¤§ä¿ç•™ä¸ªæ•°
+#define WarningPQ_EXPENDFACTOR	0.5 //æ‰©å®¹å› å­ï¼Œæ‰©å±•çš„å¤§å°=åŸå¤§å°*æ‰©å®¹å› å­
 
 
-/****½á¹¹Ìå¶¨Òå****/
-typedef struct MaxHeapStruct* WaringPriorityQueue;
+/****ç»“æ„ä½“å®šä¹‰****/
 
-//¶Ñ½á¹¹Ìå£¨»ùÓÚÊı×é£©
+//é¢„è­¦æ¶ˆæ¯ç»“æ„ä½“
+typedef struct WarningMessage {
+    int Scene; 	        //é¢„è­¦åœºæ™¯
+    int Level; 		    //é¢„è­¦ç­‰çº§
+    double RVLatitude;  //RVçº¬åº¦
+    double RVLongitude; //RVç»åº¦
+} tWarningMessage;
+
+//å †ç»“æ„ä½“ï¼ˆåŸºäºæ•°ç»„ï¼‰
 typedef struct MaxHeapStruct {
-	int Capacity; 	                //¶ÑÈİÁ¿(×Ô¶¨Òå)
-	int Size; 		                //µ±Ç°¶Ñ´óĞ¡
-	tWaringMessage* WarningMessages;//Ô¤¾¯ÏûÏ¢Êı×é
+    int Capacity; 	                //å †å®¹é‡(è‡ªå®šä¹‰)
+    int Size; 		                //å½“å‰å †å¤§å°
+    struct WarningMessage* WarningMessages;//é¢„è­¦æ¶ˆæ¯æ•°ç»„
 } tMaxHeapStruct;
 
-//Ô¤¾¯ÏûÏ¢½á¹¹Ìå
-typedef struct WaringMessage {
-	int Scene; 	        //Ô¤¾¯³¡¾°
-	int Level; 		    //Ô¤¾¯µÈ¼¶
-	double RVLatitude;  //RVÎ³¶È
-	double RVLongitude; //RV¾­¶È
-} tWaringMessage;
+typedef struct MaxHeapStruct* WarningPriorityQueue;
 
 
-/****ÓÅÏÈ¼¶¶ÓÁĞÏà¹Ø²Ù×÷£¨×î´ó¶Ñ£©****/
-WaringPriorityQueue WarningPQInitialize(int capacity);					    //³õÊ¼»¯ ÓÅÏÈ¼¶¶ÓÁĞ£¨¶Ñ£©
-int WarningPQDestroy(WaringPriorityQueue WPQ);						        //Ïú»Ù ÓÅÏÈ¼¶¶ÓÁĞ£¨¶Ñ£©
-int WarningPQMakeEmpty(WaringPriorityQueue WPQ);						    //Çå¿Õ ÓÅÏÈ¼¶¶ÓÁĞ£¨¶Ñ£©
-int WarningPQInsertBSM(WaringPriorityQueue WPQ, tWaringMessage WM);			//Èë¶Ó£º²åÈë³µÁ¾BSMÏûÏ¢
-double WarningPQComputeKey(tWaringMessage WM);								//¼ÆËãBSMÏûÏ¢µÄÓÅÏÈ¼¶£¨keyÔ½Ğ¡£¬ÓÅÏÈ¼¶Ô½¸ß£©
-int WarningPQDeleteMinBSM(WaringPriorityQueue WPQ, tWaringMessage* topWM); 	//³ö¶Ó£ºÉ¾³ıÓÅÏÈ¼¶×î¸ß£¨¹Ø¼ü×Ö×îĞ¡£©BSMÏûÏ¢
-int WarningPQQueryMinBSM(WaringPriorityQueue WPQ, tWaringMessage* topWM);   //²éÑ¯£ºÓÅÏÈ¼¶×î¸ß£¨¹Ø¼ü×Ö×îĞ¡£©BSMÏûÏ¢
-//ÖØÅÅĞò£¨×îĞ¡¶Ñ£©
-int WarningPQReSort(WaringPriorityQueue WPQ);							    //¸üĞÂHVµÄBSMÏûÏ¢ºó£¬ĞèÒª¶ÔÓÅÏÈ¼¶¶ÓÁĞ½øĞĞÖØÅÅĞò
-int IsWarningPQEmpty(WaringPriorityQueue WPQ); 						        //ÅĞ¶ÏÓÅÏÈ¼¶¶ÓÁĞÊÇ·ñÎª¿Õ
-int IsWarningPQFull(WaringPriorityQueue WPQ);							    //ÅĞ¶ÏÓÅÏÈ¼¶¶ÓÁĞÊÇ·ñÒÑÂú
+/****ä¼˜å…ˆçº§é˜Ÿåˆ—ç›¸å…³æ“ä½œï¼ˆæœ€å¤§å †ï¼‰****/
+WarningPriorityQueue WarningPQInitialize(int capacity);					    //åˆå§‹åŒ– ä¼˜å…ˆçº§é˜Ÿåˆ—ï¼ˆå †ï¼‰
+int WarningPQDestroy(WarningPriorityQueue WPQ);						        //é”€æ¯ ä¼˜å…ˆçº§é˜Ÿåˆ—ï¼ˆå †ï¼‰
+int WarningPQMakeEmpty(WarningPriorityQueue WPQ);						    //æ¸…ç©º ä¼˜å…ˆçº§é˜Ÿåˆ—ï¼ˆå †ï¼‰
+int WarningPQInsert(WarningPriorityQueue WPQ, tWarningMessage WM);		    //å…¥é˜Ÿï¼šæ’å…¥é¢„è­¦æ¶ˆæ¯
+double WarningPQComputeKey(tWarningMessage WM);								//è®¡ç®—é¢„è­¦æ¶ˆæ¯çš„ä¼˜å…ˆçº§ï¼ˆkeyè¶Šå°ï¼Œä¼˜å…ˆçº§è¶Šé«˜ï¼‰
+int WarningPQDeleteMax(WarningPriorityQueue WPQ, tWarningMessage* topWM);   //å‡ºé˜Ÿï¼šåˆ é™¤ä¼˜å…ˆçº§æœ€é«˜ï¼ˆå…³é”®å­—æœ€å¤§ï¼‰é¢„è­¦æ¶ˆæ¯
+int WarningPQQueryMax(WarningPriorityQueue WPQ, tWarningMessage* topWM);    //æŸ¥è¯¢ï¼šä¼˜å…ˆçº§æœ€é«˜ï¼ˆå…³é”®å­—æœ€å¤§ï¼‰é¢„è­¦æ¶ˆæ¯
+//éå†æ•°ç»„å®ç°ï¼ˆæ‰¾ä¼˜å…ˆçº§æœ€ä½ï¼‰
+int WarningPQDeleteMin(WarningPriorityQueue WPQ, tWarningMessage* bottomWM);//å‡ºé˜Ÿï¼šåˆ é™¤ä¼˜å…ˆçº§æœ€ä½ï¼ˆå…³é”®å­—æœ€å°ï¼‰é¢„è­¦æ¶ˆæ¯
+int IsWarningPQEmpty(WarningPriorityQueue WPQ); 						    //åˆ¤æ–­ä¼˜å…ˆçº§é˜Ÿåˆ—æ˜¯å¦ä¸ºç©º
+int IsWarningPQFull(WarningPriorityQueue WPQ);							    //åˆ¤æ–­ä¼˜å…ˆçº§é˜Ÿåˆ—æ˜¯å¦å·²æ»¡
 
 
 
