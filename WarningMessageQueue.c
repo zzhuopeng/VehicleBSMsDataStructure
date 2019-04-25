@@ -79,6 +79,7 @@ int WarningPQInsert(WarningPriorityQueue WPQ, tWarningMessage WM)
     int biggerCapacity;         //扩展后容量
     tWarningMessage* biggerWM;  //扩展后数组
     tWarningMessage* minWM;     //临时预警消息指针
+    int i;
 
     if(NULL == WPQ) {
         printf("WarningPQInsertBSM: WPQ need to be initialized\n");
@@ -122,8 +123,13 @@ int WarningPQInsert(WarningPriorityQueue WPQ, tWarningMessage WM)
         free(minWM);
     }
 
-    //插入预警消息
-
+    //插入预警消息（上滤）
+    for(i=++WPQ->Size; i>=1&&WarningPQComputeKey(WPQ->WarningMessages[i/2])<WarningPQComputeKey(WM); i/=2) {
+        //父节点向下移动
+        WPQ->WarningMessages[i] = WPQ->WarningMessages[i/2];
+    }
+    WPQ->WarningMessages[i] = WPQ->WarningMessages[WM];
+    return 1;
 }
 
 
@@ -134,7 +140,9 @@ int WarningPQInsert(WarningPriorityQueue WPQ, tWarningMessage WM)
 */
 double WarningPQComputeKey(tWarningMessage WM)
 {
-
+    //这里暂时用相加的方式计算权值
+    //实际上可能某些优先级低而Level高的场景会比优先级高而Level低的场景更危险
+    return WM->Scene+WM->Level;
 }
 
 /**
@@ -144,7 +152,37 @@ double WarningPQComputeKey(tWarningMessage WM)
 */
 int WarningPQDeleteMax(WarningPriorityQueue WPQ, tWarningMessage* topWM)
 {
+    tWarningMessage* LastWM;
+    int child, i;
 
+    if(NULL == WPQ) {
+        printf("WarningPQDeleteMax: WPQ need to be initialized\n");
+        return 0;
+    }
+    if(IsPQEmpty(WPQ)) {
+        printf("WarningPQDeleteMax: WPQ is empty\n");
+        return 0;
+    }
+    if(NULL == topWM) {
+        printf("WarningPQDeleteMax: topWM need to be initialized\n");
+        return 0;
+    }
+    //记录根节点的值
+    *topWM = WPQ->WarningMessages[1];
+    //将最后一个节点从根节点开始下滤
+    LastWM = WPQ->WarningMessages[WPQ->Size];
+    for(i=1; i<=WPQ->Size; i*=2) {
+        child = i*2;
+        //比较子节点大小，找大的子节点
+        if(child!=WPQ->Size && WarningPQComputeKey(WPQ->WarningMessages[child]) < WarningPQComputeKey(WPQ->WarningMessages[child+1])) {
+            child++;
+        }
+        //下滤
+        if(WarningPQComputeKey(child) > WarningPQComputeKey(LastWM)) {
+            //子节点上移
+
+        }
+    }
 }
 
 
@@ -177,7 +215,7 @@ int WarningPQDeleteMin(WarningPriorityQueue WPQ, tWarningMessage* topWM)
 */
 int IsWarningPQEmpty(WarningPriorityQueue WPQ)
 {
-
+    return 0 == WPQ->Size;
 }
 
 
@@ -188,7 +226,7 @@ int IsWarningPQEmpty(WarningPriorityQueue WPQ)
 */
 int IsWarningPQFull(WarningPriorityQueue WPQ)
 {
-
+    return WPQ->Capacity == WPQ->Size;
 }
 
 

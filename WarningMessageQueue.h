@@ -7,7 +7,8 @@
  		排序规则：预警场景+预警等级
  * 注意：①PriorityQueue的容量尽量不能经常被填满，否则需要经常PQDeleteMaxBSM()， 比较耗时
    待考虑：
- 		 ②重复的BSM消息，会在PriorityQueue里面去除（这部分需要考虑一下）
+ 		 ②重复的BSM消息，会在PriorityQueue里面去除
+ 		 （直播报一次？？这部分需要考虑一下）
  */
 
 #include <stdlib.h>

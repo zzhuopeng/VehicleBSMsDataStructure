@@ -128,7 +128,7 @@ int PQInsertBSM(PriorityQueue PQhead, tBSM bsm)
     }
 
     //插入BSM消息到数组最后（上滤）
-    for(i=++PQhead->Size; PQComputeKey(PQhead->BSMs[i/2])>PQComputeKey(bsm) && i<=1; i/=2) {
+    for(i=++PQhead->Size; PQComputeKey(PQhead->BSMs[i/2])>PQComputeKey(bsm) && i>=1; i/=2) {
         PQhead->BSMs[i] = PQhead->BSMs[i/2];//将父节点向下移动
     }
     PQhead->BSMs[i] = bsm;
@@ -157,7 +157,7 @@ static int PQDeduplication(PriorityQueue PQhead, tBSM bsm)
     if(index <= PQhead->Size) {
         if(PQComputeKey(PQhead->BSMs[index]) > PQComputeKey(bsm)) { //比原来的小，上滤
             //从原来index位置，上滤
-            for(i=index; PQComputeKey(PQhead->BSMs[i/2])>PQComputeKey(bsm) && i<=1; i/=2) {
+            for(i=index; PQComputeKey(PQhead->BSMs[i/2])>PQComputeKey(bsm) && i>=1; i/=2) {
                 PQhead->BSMs[i] = PQhead->BSMs[i/2];//将父节点向下移动
             }
             //将该节点放到合适位置
@@ -330,7 +330,7 @@ int PQDeleteMaxBSM(PriorityQueue PQhead, tBSM* bottomBSM)
     memset(PQhead->BSMs+PQhead->Size, 0, sizeof(tBSM));
     PQhead->Size--;
     //(将最后一个节点LastBSM，从原来MaxBSM位置)上滤
-    for(i=MaxIndex; PQComputeKey(PQhead->BSMs[i/2])>PQComputeKey(LastBSM) && i<=1; i/=2) {
+    for(i=MaxIndex; PQComputeKey(PQhead->BSMs[i/2])>PQComputeKey(LastBSM) && i>=1; i/=2) {
         PQhead->BSMs[i] = PQhead->BSMs[i/2];//将父节点向下移动
     }
     //将该节点放到合适位置
