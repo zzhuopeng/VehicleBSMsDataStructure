@@ -36,7 +36,7 @@ PriorityQueue PQInitialize(int capacity)
     }
     H->Capacity = capacity;
     H->Size = 0;
-//	H->BSMs[0] = {0};
+//	H->BSMs[0] = MINIMUM_BSM;
     return H;
 }
 
@@ -128,7 +128,7 @@ int PQInsertBSM(PriorityQueue PQhead, tBSM bsm)
     }
 
     //插入BSM消息到数组最后（上滤）
-    for(i=++PQhead->Size; PQComputeKey(PQhead->BSMs[i/2])>PQComputeKey(bsm) && i>=1; i/=2) {
+    for(i=++PQhead->Size; PQComputeKey(PQhead->BSMs[i/2])>PQComputeKey(bsm) && i/2>=1; i/=2) {
         PQhead->BSMs[i] = PQhead->BSMs[i/2];//将父节点向下移动
     }
     PQhead->BSMs[i] = bsm;
@@ -157,7 +157,7 @@ static int PQDeduplication(PriorityQueue PQhead, tBSM bsm)
     if(index <= PQhead->Size) {
         if(PQComputeKey(PQhead->BSMs[index]) > PQComputeKey(bsm)) { //比原来的小，上滤
             //从原来index位置，上滤
-            for(i=index; PQComputeKey(PQhead->BSMs[i/2])>PQComputeKey(bsm) && i>=1; i/=2) {
+            for(i=index; PQComputeKey(PQhead->BSMs[i/2])>PQComputeKey(bsm) && i/2>=1; i/=2) {
                 PQhead->BSMs[i] = PQhead->BSMs[i/2];//将父节点向下移动
             }
             //将该节点放到合适位置
@@ -245,9 +245,8 @@ int PQDeleteMinBSM(PriorityQueue PQhead, tBSM* topBSM)
     //先记录下来
     *topBSM = PQhead->BSMs[1];
     LastBSM = PQhead->BSMs[PQhead->Size];
-    //清除最后一个节点（或者直接在insert时覆盖？）
-    memset(PQhead->BSMs+PQhead->Size, 0, sizeof(tBSM));
     PQhead->Size--;
+
     //（将最后一个节点，当成根节点）下滤
     for(i=1; i*2<=PQhead->Size; i=Child) {
         //比较左右子节点的大小,找小的子节点
@@ -299,7 +298,7 @@ int PQQueryMinBSM(PriorityQueue PQhead, tBSM* topBSM)
 int PQDeleteMaxBSM(PriorityQueue PQhead, tBSM* bottomBSM)
 {
     int i, MaxIndex;
-    tBSM MaxBSM, LastBSM;
+    tBSM* MaxBSM;
 
     if(NULL == PQhead) {
         printf("PQDeleteMaxBSM: need to create Priority Queue first\n");
@@ -316,26 +315,21 @@ int PQDeleteMaxBSM(PriorityQueue PQhead, tBSM* bottomBSM)
     //找到优先级最低的BSM,并记录下标MaxIndex
     i = (int)PQhead->Size/2+1;
     MaxIndex = i;
-    MaxBSM = PQhead->BSMs[i];
+    *MaxBSM = PQhead->BSMs[i];
     for(i=i+1; i<=PQhead->Size; i++) {
-        if(PQComputeKey(PQhead->BSMs[i]) > PQComputeKey(MaxBSM)) {
-            MaxBSM = PQhead->BSMs[i];
+        if(PQComputeKey(PQhead->BSMs[i]) > PQComputeKey(*MaxBSM)) {
+            *MaxBSM = PQhead->BSMs[i];
             MaxIndex = i;
         }
     }
-    *bottomBSM = MaxBSM;
-    //先记录最后一个节点，用于填充MaxBSM删除后的空缺
-    LastBSM = PQhead->BSMs[PQhead->Size];
-    //清除最后一个节点（或者直接在insert时覆盖？）
-    memset(PQhead->BSMs+PQhead->Size, 0, sizeof(tBSM));
-    PQhead->Size--;
+    *bottomBSM = *MaxBSM;
     //(将最后一个节点LastBSM，从原来MaxBSM位置)上滤
-    for(i=MaxIndex; PQComputeKey(PQhead->BSMs[i/2])>PQComputeKey(LastBSM) && i>=1; i/=2) {
+    for(i=MaxIndex; PQComputeKey(PQhead->BSMs[i/2])>PQComputeKey(PQhead->BSMs[PQhead->Size]) && i/2>=1; i/=2) {
         PQhead->BSMs[i] = PQhead->BSMs[i/2];//将父节点向下移动
     }
     //将该节点放到合适位置
-    PQhead->BSMs[i] = LastBSM;
-
+    PQhead->BSMs[i] = PQhead->BSMs[PQhead->Size];
+    PQhead->Size--;
     return 1;
 }
 
@@ -347,7 +341,6 @@ int PQDeleteMaxBSM(PriorityQueue PQhead, tBSM* bottomBSM)
 int PQQueryMaxBSM(PriorityQueue PQhead, tBSM* bottomBSM)
 {
     int i;
-    tBSM MaxBSM;
 
     if(NULL == PQhead) {
         printf("PQQueryMaxBSM: need to create Priority Queue first\n");
@@ -362,14 +355,13 @@ int PQQueryMaxBSM(PriorityQueue PQhead, tBSM* bottomBSM)
         return 0;
     }
     i = (int)PQhead->Size/2+1;
-    MaxBSM = PQhead->BSMs[i];
+    *bottomBSM = PQhead->BSMs[i];
     //最大值一定在树叶上，叶子节点范围为(n/2+1~n),下标从1开始
     for(i=i+1; i<=PQhead->Size; i++) {
-        if(PQComputeKey(PQhead->BSMs[i]) > PQComputeKey(MaxBSM)) {
-            MaxBSM = PQhead->BSMs[i];
+        if(PQComputeKey(PQhead->BSMs[i]) > PQComputeKey(*bottomBSM)) {
+            *bottomBSM = PQhead->BSMs[i];
         }
     }
-    *bottomBSM = MaxBSM;
     return 1;
 }
 

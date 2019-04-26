@@ -3,7 +3,7 @@
 
 /**
  * 说明：车辆待处理数据VPDs(Vehicle Pending Datas)存储结构体
- 		单个车辆待处理数据通过BSM存储，车辆之间数据通过PriorityQueue存储，BSMs[0]不包含数据。
+ 		单个车辆待处理数据通过BSM存储，车辆之间数据通过PriorityQueue存储，BSMs[0]不包含有效数据。
  		排序规则：车辆状态+车辆之间距离
  * 注意：①PriorityQueue中，待处理消息不能保留太多，
  		否则每次更新HV的BSM后，都需要耗费较多时间重排序
@@ -18,6 +18,7 @@
 #define PQ_MIN_CAPACITY 	8	//HV周围车辆待处理信息（堆容量）最小保留个数
 #define PQ_MAX_CAPACITY 	64	//HV周围车辆待处理信息（堆容量）最大保留个数
 #define PQ_EXPENDFACTOR		0.5 //扩容因子，扩展的大小=原大小*扩容因子
+//#define MINIMUM_BSM		{}      //用于给哨兵节点BSMs[0]赋值（保证小于任何有效值）
 
 
 /****结构体定义****/

@@ -18,7 +18,7 @@
 #define WarningPQ_MIN_CAPACITY 	8	//预警消息优先级队列（堆容量）最小保留个数
 #define WarningPQ_MAX_CAPACITY 	64	//预警消息优先级队列（堆容量）最大保留个数
 #define WarningPQ_EXPENDFACTOR	0.5 //扩容因子，扩展的大小=原大小*扩容因子
-
+//#define MINIMUM_WARNINGMESSAGE	{}      //用于给哨兵节点WarningMessages[0]赋值（保证大于任何有效值）
 
 /****结构体定义****/
 
@@ -45,7 +45,7 @@ WarningPriorityQueue WarningPQInitialize(int capacity);					    //初始化 优�
 int WarningPQDestroy(WarningPriorityQueue WPQ);						        //销毁 优先级队列（堆）
 int WarningPQMakeEmpty(WarningPriorityQueue WPQ);						    //清空 优先级队列（堆）
 int WarningPQInsert(WarningPriorityQueue WPQ, tWarningMessage WM);		    //入队：插入预警消息
-double WarningPQComputeKey(tWarningMessage WM);								//计算预警消息的优先级（key越小，优先级越高）
+int WarningPQComputeKey(tWarningMessage WM);								//计算预警消息的优先级（key越小，优先级越高）
 int WarningPQDeleteMax(WarningPriorityQueue WPQ, tWarningMessage* topWM);   //出队：删除优先级最高（关键字最大）预警消息
 int WarningPQQueryMax(WarningPriorityQueue WPQ, tWarningMessage* topWM);    //查询：优先级最高（关键字最大）预警消息
 //遍历数组实现（找优先级最低）
