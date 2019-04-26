@@ -124,11 +124,11 @@ int WarningPQInsert(WarningPriorityQueue WPQ, tWarningMessage WM)
     }
 
     //插入预警消息（上滤）
-    for(i=++WPQ->Size; i>=1&&WarningPQComputeKey(WPQ->WarningMessages[i/2])<WarningPQComputeKey(WM); i/=2) {
+    for(i=++WPQ->Size; i/2>=1&&WarningPQComputeKey(WPQ->WarningMessages[i/2])<WarningPQComputeKey(WM); i/=2) {
         //父节点向下移动
         WPQ->WarningMessages[i] = WPQ->WarningMessages[i/2];
     }
-    WPQ->WarningMessages[i] = WPQ->WarningMessages[WM];
+    WPQ->WarningMessages[i] = WM;
     return 1;
 }
 
@@ -138,11 +138,11 @@ int WarningPQInsert(WarningPriorityQueue WPQ, tWarningMessage WM)
 @ param	 WPQ 优先级队列
 @ return 0表示失败，1表示成功
 */
-double WarningPQComputeKey(tWarningMessage WM)
+int WarningPQComputeKey(tWarningMessage WM)
 {
     //这里暂时用相加的方式计算权值
     //实际上可能某些优先级低而Level高的场景会比优先级高而Level低的场景更危险
-    return WM->Scene+WM->Level;
+    return WM.Scene+WM.Level;
 }
 
 /**
@@ -152,7 +152,7 @@ double WarningPQComputeKey(tWarningMessage WM)
 */
 int WarningPQDeleteMax(WarningPriorityQueue WPQ, tWarningMessage* topWM)
 {
-    tWarningMessage* LastWM;
+    tWarningMessage LastWM;
     int child, i;
 
     if(NULL == WPQ) {
@@ -169,9 +169,12 @@ int WarningPQDeleteMax(WarningPriorityQueue WPQ, tWarningMessage* topWM)
     }
     //记录根节点的值
     *topWM = WPQ->WarningMessages[1];
-    //将最后一个节点从根节点开始下滤
+
+    //记录最后节点
     LastWM = WPQ->WarningMessages[WPQ->Size];
-    for(i=1; i<=WPQ->Size; i*=2) {
+    WPQ->Size--;
+    //将最后一个节点从根节点开始下滤
+    for(i=1; i<=WPQ->Size; i=child) {
         child = i*2;
         //比较子节点大小，找大的子节点
         if(child!=WPQ->Size && WarningPQComputeKey(WPQ->WarningMessages[child]) < WarningPQComputeKey(WPQ->WarningMessages[child+1])) {
@@ -180,9 +183,14 @@ int WarningPQDeleteMax(WarningPriorityQueue WPQ, tWarningMessage* topWM)
         //下滤
         if(WarningPQComputeKey(child) > WarningPQComputeKey(LastWM)) {
             //子节点上移
-
+            WPQ->WarningMessages[i] = WPQ->WarningMessages[child];
+        } else {
+            break;
         }
     }
+    //将该节点放到合适位置
+    WPQ->WarningMessages[i] = LastWM;
+    return 1;
 }
 
 
@@ -193,7 +201,20 @@ int WarningPQDeleteMax(WarningPriorityQueue WPQ, tWarningMessage* topWM)
 */
 int WarningPQQueryMax(WarningPriorityQueue WPQ, tWarningMessage* topWM)
 {
-
+    if(NULL == WPQ) {
+        printf("WarningPQQueryMax: WPQ need to be initialized\n");
+        return 0;
+    }
+    if(IsPQEmpty(WPQ)) {
+        printf("WarningPQQueryMax: WPQ is empty\n");
+        return 0;
+    }
+    if(NULL == topWM) {
+        printf("WarningPQQueryMax: topWM need to be initialized\n");
+        return 0;
+    }
+    *topWM = WPQ->WarningMessages[1];
+    return 1;
 }
 
 
@@ -202,9 +223,43 @@ int WarningPQQueryMax(WarningPriorityQueue WPQ, tWarningMessage* topWM)
 @ param	 WPQ 优先级队列 队首, bottomWM 优先级最低的预警消息指针
 @ return 0表示失败，1表示成功
 */
-int WarningPQDeleteMin(WarningPriorityQueue WPQ, tWarningMessage* topWM)
+int WarningPQDeleteMin(WarningPriorityQueue WPQ, tWarningMessage* bottomWM)
 {
+    int i, minIndex;
+    tWarningMessage* minWM;
 
+    if(NULL == WPQ) {
+        printf("WarningPQDeleteMin: WPQ need to be initialized\n");
+        return 0;
+    }
+    if(IsPQEmpty(WPQ)) {
+        printf("WarningPQDeleteMin: WPQ is empty\n");
+        return 0;
+    }
+    if(NULL == bottomWM) {
+        printf("WarningPQDeleteMin: bottomWM need to be initialized\n");
+        return 0;
+    }
+    //优先级最低节点在叶子上，叶子范围为(n/2)+1至n，index从1开始
+    minWM = WPQ->WarningMessages+WPQ->Size;
+    minIndex = WPQ->Size;
+    for(i=WPQ->Size-1; i>=(int)(WPQ->Size/2)+1; i--) {
+        if(WarningPQComputeKey(WPQ->WarningMessages[i]) < WarningPQComputeKey(*minWM)) {
+            minWM = WPQ->WarningMessages+i;
+            minIndex = i;
+        }
+    }
+    //找到优先级最低的节点
+    *bottomWM = *minWM;
+
+    //通过最后一个节点填充，应该删除的优先级最小节点（上滤）
+    for(i=minIndex; i/2<=1 &&
+        WarningPQComputeKey(WPQ->WarningMessages[i/2])<WarningPQComputeKey(WPQ->WarningMessages[WPQ->Size]); i/=2) {
+        WPQ->WarningMessages[i] = WPQ->WarningMessages[i/2];
+    }
+    WPQ->WarningMessages[i] = WPQ->WarningMessages[WPQ->Size];
+    WPQ->Size--;
+    return 1;
 }
 
 
