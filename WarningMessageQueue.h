@@ -41,17 +41,16 @@ typedef struct MaxHeapStruct* WarningPriorityQueue;
 
 
 /****优先级队列相关操作（最大堆）****/
-WarningPriorityQueue WarningPQInitialize(int capacity);					    //初始化 优先级队列（堆）
-int WarningPQDestroy(WarningPriorityQueue WPQ);						        //销毁 优先级队列（堆）
-int WarningPQMakeEmpty(WarningPriorityQueue WPQ);						    //清空 优先级队列（堆）
-int WarningPQInsert(WarningPriorityQueue WPQ, tWarningMessage WM);		    //入队：插入预警消息
-int WarningPQComputeKey(tWarningMessage WM);								//计算预警消息的优先级（key越小，优先级越高）
-int WarningPQDeleteMax(WarningPriorityQueue WPQ, tWarningMessage* topWM);   //出队：删除优先级最高（关键字最大）预警消息
-int WarningPQQueryMax(WarningPriorityQueue WPQ, tWarningMessage* topWM);    //查询：优先级最高（关键字最大）预警消息
+extern WarningPriorityQueue WarningPQInitialize(int capacity);					    //初始化 优先级队列（堆）
+extern int WarningPQDestroy(WarningPriorityQueue WPQ);						        //销毁 优先级队列（堆）
+extern int WarningPQMakeEmpty(WarningPriorityQueue WPQ);						    //清空 优先级队列（堆）
+extern int WarningPQInsert(WarningPriorityQueue WPQ, tWarningMessage WM);
+extern int WarningPQDeleteMax(WarningPriorityQueue WPQ, tWarningMessage* topWM);   //出队：删除优先级最高（关键字最大）预警消息
+extern int WarningPQQueryMax(WarningPriorityQueue WPQ, tWarningMessage* topWM);    //查询：优先级最高（关键字最大）预警消息
 //遍历数组实现（找优先级最低）
-int WarningPQDeleteMin(WarningPriorityQueue WPQ, tWarningMessage* bottomWM);//出队：删除优先级最低（关键字最小）预警消息
-int IsWarningPQEmpty(WarningPriorityQueue WPQ); 						    //判断优先级队列是否为空
-int IsWarningPQFull(WarningPriorityQueue WPQ);							    //判断优先级队列是否已满
+extern int WarningPQDeleteMin(WarningPriorityQueue WPQ, tWarningMessage* bottomWM);//出队：删除优先级最低（关键字最小）预警消息
+extern int IsWarningPQEmpty(WarningPriorityQueue WPQ); 						    //判断优先级队列是否为空
+extern int IsWarningPQFull(WarningPriorityQueue WPQ);							    //判断优先级队列是否已满
 
 
 

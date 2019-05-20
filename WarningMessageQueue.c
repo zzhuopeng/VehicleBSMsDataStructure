@@ -2,7 +2,7 @@
 
 /**静态函数声明**/
 //③重复的BSM消息，会在PriorityQueue里面去除
-
+static int WarningPQComputeKey(tWarningMessage WM);
 
 /****优先级队列相关操作（最大堆）****/
 
@@ -11,7 +11,7 @@
 @ param	 capacity 优先级队列初始化容量
 @ return WarningPriorityQueue 优先级队列
 */
-WarningPriorityQueue WarningPQInitialize(int capacity)
+extern WarningPriorityQueue WarningPQInitialize(int capacity)
 {
     WarningPriorityQueue W;
     if(capacity < WarningPQ_MIN_CAPACITY) {
@@ -45,7 +45,7 @@ WarningPriorityQueue WarningPQInitialize(int capacity)
 @ param	 WPQ 优先级队列
 @ return 0表示失败，1表示成功
 */
-int WarningPQDestroy(WarningPriorityQueue WPQ)
+extern int WarningPQDestroy(WarningPriorityQueue WPQ)
 {
     free(WPQ->WarningMessages);
     free(WPQ);
@@ -58,7 +58,7 @@ int WarningPQDestroy(WarningPriorityQueue WPQ)
 @ param	 WPQ 优先级队列
 @ return 0表示失败，1表示成功
 */
-int WarningPQMakeEmpty(WarningPriorityQueue WPQ)
+extern int WarningPQMakeEmpty(WarningPriorityQueue WPQ)
 {
     if(NULL == WPQ) {
         printf("WarningPQMakeEmpty: WPQ need to be initialized\n");
@@ -74,7 +74,7 @@ int WarningPQMakeEmpty(WarningPriorityQueue WPQ)
 @ param	 WPQ 优先级队列；WM 入队的预警消息
 @ return 0表示失败，1表示成功
 */
-int WarningPQInsert(WarningPriorityQueue WPQ, tWarningMessage WM)
+extern int WarningPQInsert(WarningPriorityQueue WPQ, tWarningMessage WM)
 {
     int biggerCapacity;         //扩展后容量
     tWarningMessage* biggerWM;  //扩展后数组
@@ -138,7 +138,7 @@ int WarningPQInsert(WarningPriorityQueue WPQ, tWarningMessage WM)
 @ param	 WPQ 优先级队列
 @ return 0表示失败，1表示成功
 */
-int WarningPQComputeKey(tWarningMessage WM)
+static int WarningPQComputeKey(tWarningMessage WM)
 {
     //这里暂时用相加的方式计算权值
     //实际上可能某些优先级低而Level高的场景会比优先级高而Level低的场景更危险
@@ -150,7 +150,7 @@ int WarningPQComputeKey(tWarningMessage WM)
 @ param	 WPQ 优先级队列, topWM 优先级最高的预警消息指针
 @ return 0表示失败，1表示成功
 */
-int WarningPQDeleteMax(WarningPriorityQueue WPQ, tWarningMessage* topWM)
+extern int WarningPQDeleteMax(WarningPriorityQueue WPQ, tWarningMessage* topWM)
 {
     tWarningMessage LastWM;
     int child, i;
@@ -159,7 +159,7 @@ int WarningPQDeleteMax(WarningPriorityQueue WPQ, tWarningMessage* topWM)
         printf("WarningPQDeleteMax: WPQ need to be initialized\n");
         return 0;
     }
-    if(IsPQEmpty(WPQ)) {
+    if(IsWarningPQEmpty(WPQ)) {
         printf("WarningPQDeleteMax: WPQ is empty\n");
         return 0;
     }
@@ -181,7 +181,7 @@ int WarningPQDeleteMax(WarningPriorityQueue WPQ, tWarningMessage* topWM)
             child++;
         }
         //下滤
-        if(WarningPQComputeKey(child) > WarningPQComputeKey(LastWM)) {
+        if(WarningPQComputeKey(WPQ->WarningMessages[child]) > WarningPQComputeKey(LastWM)) {
             //子节点上移
             WPQ->WarningMessages[i] = WPQ->WarningMessages[child];
         } else {
@@ -199,13 +199,13 @@ int WarningPQDeleteMax(WarningPriorityQueue WPQ, tWarningMessage* topWM)
 @ param	 WPQ 优先级队列, topBSM 优先级最高的预警消息指针
 @ return 0表示失败，1表示成功
 */
-int WarningPQQueryMax(WarningPriorityQueue WPQ, tWarningMessage* topWM)
+extern int WarningPQQueryMax(WarningPriorityQueue WPQ, tWarningMessage* topWM)
 {
     if(NULL == WPQ) {
         printf("WarningPQQueryMax: WPQ need to be initialized\n");
         return 0;
     }
-    if(IsPQEmpty(WPQ)) {
+    if(IsWarningPQEmpty(WPQ)) {
         printf("WarningPQQueryMax: WPQ is empty\n");
         return 0;
     }
@@ -223,7 +223,7 @@ int WarningPQQueryMax(WarningPriorityQueue WPQ, tWarningMessage* topWM)
 @ param	 WPQ 优先级队列 队首, bottomWM 优先级最低的预警消息指针
 @ return 0表示失败，1表示成功
 */
-int WarningPQDeleteMin(WarningPriorityQueue WPQ, tWarningMessage* bottomWM)
+extern int WarningPQDeleteMin(WarningPriorityQueue WPQ, tWarningMessage* bottomWM)
 {
     int i, minIndex;
     tWarningMessage* minWM;
@@ -232,7 +232,7 @@ int WarningPQDeleteMin(WarningPriorityQueue WPQ, tWarningMessage* bottomWM)
         printf("WarningPQDeleteMin: WPQ need to be initialized\n");
         return 0;
     }
-    if(IsPQEmpty(WPQ)) {
+    if(IsWarningPQEmpty(WPQ)) {
         printf("WarningPQDeleteMin: WPQ is empty\n");
         return 0;
     }
@@ -268,7 +268,7 @@ int WarningPQDeleteMin(WarningPriorityQueue WPQ, tWarningMessage* bottomWM)
 @ param	 WPQ 优先级队列
 @ return 0表示为空，1表示非空
 */
-int IsWarningPQEmpty(WarningPriorityQueue WPQ)
+extern int IsWarningPQEmpty(WarningPriorityQueue WPQ)
 {
     return 0 == WPQ->Size;
 }
@@ -279,7 +279,7 @@ int IsWarningPQEmpty(WarningPriorityQueue WPQ)
 @ param	 WPQ 优先级队列
 @ return 0表示为未满，1表示已满
 */
-int IsWarningPQFull(WarningPriorityQueue WPQ)
+extern int IsWarningPQFull(WarningPriorityQueue WPQ)
 {
     return WPQ->Capacity == WPQ->Size;
 }

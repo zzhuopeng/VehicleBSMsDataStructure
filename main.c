@@ -3,70 +3,72 @@
 #include "MultiVehicleHistoryDatas.h"
 #include "VehiclePendingDatas.h"
 
+/**全局变量**/
+PriorityQueue pV2XRxPQ;            //待处理V2X消息
+
+
 /****函数声明****/
-int Welcome(void);
+
 
 int main(void)
 {
+    int i, j, ret;
+
+    //初始化优先级队列
+    pV2XRxPQ = PQInitialize(PQ_MAX_CAPACITY);
+    if(NULL == pV2XRxPQ) {
+        printf("[Debug]:PQInitialize() failed\n");
+        goto Error;
+    }
+
+    //初始化Msg
+    tBSM *Msg = (tBSM *)calloc(1,sizeof(tBSM));
+    if(NULL == Msg) {
+        printf("[Debug]: calloc for Msg failed\n");
+        goto Error;
+    }
+
     while(1) {
-        Welcome();
+        //插入
+        for(i=1; i<=10; i++) {
+            Msg->id = i;
+            Msg->vehicleID = i;
+            Msg->latitude = 29.5385722917+(double)i;
+            Msg->longitude = 106.6032197583+(double)i;
+            Msg->elevation = rand()%100/10;
+            Msg->speed = rand()%100/10;
+            Msg->heading = (float) 340+i;
+            Msg->vehicleClass = (long) i;
+
+            ret = PQInsertBSM(pV2XRxPQ, *Msg);
+            if(0 == ret) {
+                printf("[Debug]: PQInsertBSM() failed\n");
+            } else {
+                printf("[Debug]: PQInsertBSM() success\n");
+            }
+
+            for(j=0; j<100000000; j++) {
+                ;
+            }
+        }
+        //取出
+        for(i=1; i<10; i++) {
+            ret = PQDeleteMinBSM(pV2XRxPQ, Msg);
+            if(0 == ret) {
+                printf("[Debug]: PQInsertBSM() failed\n");
+            } else {
+                printf("[Debug]: PQInsertBSM() success\n");
+                printf("id=%d vehicleID=%d latitude=%f longitude=%f elevation=%f speed=%f heading=%f vehicleClass=%ld. \n",
+                        Msg->id, Msg->vehicleID, Msg->latitude, Msg->longitude, Msg->elevation, Msg->speed, Msg->heading, Msg->vehicleClass);
+            }
+
+            for(j=0; j<1000000000; j++) {
+                ;
+            }
+        }
     }
-}
-
-//欢迎页面：测试VHD结构
-int Welcome(void)
-{
-    printf("******* Welcome to the VehicleHistoryData Structure *******\n");
-    printf("1: Insert a Stack to PriorityQueue;\n");
-    printf("2: Delete a Stack from PriorityQueue;\n");
-    printf("3: Update a Stack from PriorityQueue;\n");
-    printf("4: Query a Stack from PriorityQueue;\n\n");
-
-    printf("5: Insert a Node to Stack;\n");
-    printf("6: Delete a Node from Stack;\n");
-    printf("7: Update a Node from Stack;\n");
-    printf("8: Query a Node from Stack;\n\n");
-
-    printf("9: Printf all the data from the VehicleHistoryData;\n");
-    printf("10:Printf all the data from the PriorityQueue;\n");
-    printf("11:Printf all the data from the Stack;\n\n");
-
-    printf("0: Exit.\n");
-    printf("*************************************************\n");
-    printf("Select your operation: ");
-
-    int ch;
-    scanf("%d",&ch);
-    switch(ch) {
-        case 1:
-            break;
-        case 2:
-            break;
-        case 3:
-            break;
-        case 4:
-            break;
-        case 5:
-            break;
-        case 6:
-            break;
-        case 7:
-            break;
-        case 8:
-            break;
-        case 9:
-            break;
-        case 10:
-            break;
-        case 11:
-            break;
-        case 0:
-            printf("\n退出系统");
-            exit(EXIT_SUCCESS);
-            break;
-        default :
-            printf("\n该选择有误，请重新选择");
-            break;
-    }
-    return 0;
+Error:
+    //销毁V2X消息 优先级队列
+    PQDestroy(pV2XRxPQ);
+    free(Msg);
 }

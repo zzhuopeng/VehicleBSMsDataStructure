@@ -17,7 +17,8 @@ typedef struct BSM {
 	float elevation;    //海拔
 	float speed;        //速度
 	float heading;      //航向角
-	long vehicleClass;	//车辆状态（分类）
+	long vehicleClass;	//车辆类型
+	//uint16_t VehicleEventFlags;	//车辆事件
 } tBSM;
 
 #endif

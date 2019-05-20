@@ -85,7 +85,7 @@ int PQInsertBSM(PriorityQueue PQhead, tBSM bsm)
     }
     //去除VehicleID重复的BSM，并插入新的BSM
     if(0 != PQDeduplication(PQhead, bsm)) {
-        printf("PQInsertBSM: PQDeduplication() failed\n");
+        printf("PQInsertBSM: PQDeduplication() works\n");
         return 1;
     }
 
@@ -315,10 +315,10 @@ int PQDeleteMaxBSM(PriorityQueue PQhead, tBSM* bottomBSM)
     //找到优先级最低的BSM,并记录下标MaxIndex
     i = (int)PQhead->Size/2+1;
     MaxIndex = i;
-    *MaxBSM = PQhead->BSMs[i];
+    MaxBSM = &PQhead->BSMs[i];
     for(i=i+1; i<=PQhead->Size; i++) {
         if(PQComputeKey(PQhead->BSMs[i]) > PQComputeKey(*MaxBSM)) {
-            *MaxBSM = PQhead->BSMs[i];
+            MaxBSM = &PQhead->BSMs[i];
             MaxIndex = i;
         }
     }
